@@ -1,11 +1,4 @@
-export type ApiFetcherExtraProps = {
-  /**
-   * You can add some extra props to your generated fetchers.
-   *
-   * Note: You need to re-gen after adding the first property to
-   * have the `ApiFetcherExtraProps` injected in `ApiComponents.ts`
-   **/
-};
+import { ApiContext } from "./apiContext";
 
 const baseUrl = ""; // TODO add your baseUrl
 
@@ -21,7 +14,7 @@ export type ApiFetcherOptions<TBody, THeaders, TQueryParams, TPathParams> = {
   queryParams?: TQueryParams;
   pathParams?: TPathParams;
   signal?: AbortSignal;
-} & ApiFetcherExtraProps;
+} & ApiContext["fetcherOptions"];
 
 export async function apiFetch<
   TData,

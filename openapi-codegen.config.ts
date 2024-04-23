@@ -1,13 +1,13 @@
 import {
   generateSchemaTypes,
-  generateFetchers,
+  generateReactQueryComponents,
 } from "@openapi-codegen/typescript";
 import { defineConfig } from "@openapi-codegen/cli";
 export default defineConfig({
   api: {
     from: {
       source: "url",
-      url: "https://raw.githubusercontent.com/tehrelt/sladkoezhkovo/feature/auth/docs/swagger-spec.json",
+      url: "https://raw.githubusercontent.com/tehrelt/sladkoezhkovo/dev/docs/swagger-spec.json",
     },
     outputDir: "src/api",
     to: async (context) => {
@@ -15,7 +15,7 @@ export default defineConfig({
       const { schemasFiles } = await generateSchemaTypes(context, {
         filenamePrefix,
       });
-      await generateFetchers(context, {
+      await generateReactQueryComponents(context, {
         filenamePrefix,
         schemasFiles,
       });
