@@ -1,6 +1,6 @@
 import { api } from '@/api/axios.config';
 import { AccessTokenService } from './access-token';
-import { AuthResponseDto, SignInDto } from '@/lib/dto/auth.dto';
+import { AuthResponseDto, ProfileDto, SignInDto } from '@/lib/dto/auth.dto';
 import { User } from '@/lib/types/user';
 
 export class AuthService {
@@ -27,16 +27,14 @@ export class AuthService {
 
   static async refresh() {
     const response = await api.get<AuthResponseDto>('/auth/refresh');
-
     if (response.status === 200) {
       AccessTokenService.set(response.data.accessToken);
     }
-
     return response.data;
   }
 
-  static async profile(): Promise<User> {
-    const response = await api.get<User>('/auth/profile');
+  static async profile(): Promise<ProfileDto> {
+    const response = await api.get<ProfileDto>('/auth/profile');
     return response.data;
   }
 }

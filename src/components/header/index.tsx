@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/navigation-menu';
 import Link from 'next/link';
 import { navigationMenuTriggerStyle } from '../ui/navigation-menu';
-import { Button } from '@/components/ui/button';
 import UserHeaderCard from './UserHeaderCard';
 
 type Props = {};

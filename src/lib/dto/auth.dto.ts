@@ -12,3 +12,14 @@ export type SignUpDto = {
 export type AuthResponseDto = {
   accessToken: string;
 };
+
+export type ProfileDto = {
+  id: string;
+  handle: string;
+  email: string;
+  lastName: string;
+  firstName: string;
+  middleName: string;
+  avatarId: string | null;
+  role: string;
+};

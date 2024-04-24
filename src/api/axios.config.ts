@@ -19,13 +19,14 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (config) => config,
   async (error) => {
-    const originalRequest = error.config;
     if (error.response.status === 401 && !error.config._isRetry) {
+      const originalRequest = error.config;
       originalRequest._isRetry = true;
       try {
-        await AuthService.refresh();
+        const res = await AuthService.refresh();
         return api.request(originalRequest);
       } catch (e) {
+        console.log(e);
         AccessTokenService.remove();
       }
     }

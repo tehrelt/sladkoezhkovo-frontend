@@ -8,7 +8,7 @@ import { SignInDto } from '@/lib/dto/auth.dto';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SignInSchema } from '@/lib/forms/auth.form';
+import { SignInForm } from '@/lib/forms/auth.form';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,12 +23,8 @@ import {
 } from '@/components/ui/form';
 
 export default function Auth() {
-  const form = useForm<z.infer<typeof SignInSchema>>({
-    resolver: zodResolver(SignInSchema),
-    defaultValues: {
-      login: '',
-      password: '',
-    },
+  const form = useForm<z.infer<typeof SignInForm>>({
+    resolver: zodResolver(SignInForm),
   });
 
   const { push } = useRouter();
@@ -47,7 +43,7 @@ export default function Auth() {
   });
 
   const onSubmit: SubmitHandler<SignInDto> = async (data) => {
-    mutate(data);
+    await mutate(data);
   };
 
   return (

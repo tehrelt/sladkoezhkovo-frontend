@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const SignInSchema = z.object({
+export const SignInForm = z.object({
   login: z
     .string()
     .min(2, { message: 'Логин должен быть длиной от 2 символов' }),
