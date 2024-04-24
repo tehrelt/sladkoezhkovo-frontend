@@ -9,8 +9,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
 import { navigationMenuTriggerStyleFull } from '../ui/navigation-menu';
-import { MENU_ITEMS } from '@/consts/menu-items.consts';
-import AdminAccountCard from './AdminAccountCard';
+import {
+  MENU_GUIDE_ITEMS,
+  MENU_ITEMS,
+  MENU_TABLE_ITEMS,
+} from '@/consts/menu-items.consts';
+import SidebarAccountCard from './SidebarAccountCard';
+import SidebarMenuList from './SidebarMenuList';
+import { Accordion } from '../ui/accordion';
 
 export default function Sidebar() {
   return (
@@ -28,28 +34,15 @@ export default function Sidebar() {
         </div>
       </Link>
       <hr />
-      <AdminAccountCard className="px-2" />
+      <SidebarAccountCard className="px-2" />
       <hr />
       <NavigationMenu>
-        <NavigationMenuList>
-          {MENU_ITEMS.map((item) => (
-            <NavigationMenuItem key={item.link} className="w-full">
-              <Link
-                href={`/admin/${item.link}`}
-                className="w-full"
-                legacyBehavior
-                passHref
-              >
-                <NavigationMenuLink
-                  className={`${navigationMenuTriggerStyleFull()}`}
-                >
-                  <item.icon className="mr-3" />
-                  <p className="w-full">{item.label}</p>
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-          ))}
-        </NavigationMenuList>
+        {/* @ts-ignore */}
+        <Accordion type="multiple">
+          <SidebarMenuList title="Пользователи" items={MENU_ITEMS} />
+          <SidebarMenuList title="Таблицы" items={MENU_TABLE_ITEMS} />
+          <SidebarMenuList title="Справочники" items={MENU_GUIDE_ITEMS} />
+        </Accordion>
       </NavigationMenu>
     </aside>
   );

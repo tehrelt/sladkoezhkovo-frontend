@@ -7,4 +7,6 @@ export interface User extends IBase, Iid {
   firstName: string;
   lastName: string;
   middleName: string;
+  role: string;
+  imageLink: string;
 }

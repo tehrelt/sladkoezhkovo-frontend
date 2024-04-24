@@ -5,6 +5,8 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useLogout } from '@/hooks/useLogout';
 import { Skeleton } from '@/components/ui/skeleton';
+import RoleRequired from '../utils/RoleRequired';
+import { ROLES } from '@/consts/roles.consts';
 
 export default function UserHeaderCard() {
   const { user, isLoading, loggedOut } = useUser();
@@ -42,6 +44,13 @@ export default function UserHeaderCard() {
               @{user.handle} / {user.role}{' '}
             </p>
           </div>
+
+          <RoleRequired roles={[ROLES.ADMIN]}>
+            <Link href="/admin">
+              <Button>Админ панель</Button>
+            </Link>
+          </RoleRequired>
+
           <Button onClick={() => logout()}>Выход</Button>
         </div>
       )}

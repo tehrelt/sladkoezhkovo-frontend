@@ -1,6 +1,19 @@
-import { LucideIcon, Users, ShieldCheck, Building } from 'lucide-react';
+import {
+  LucideIcon,
+  Users,
+  ShieldCheck,
+  Building,
+  MapPin,
+  MapPinned,
+  Boxes,
+  Ruler,
+  Candy,
+  Store,
+  Factory,
+  Truck,
+} from 'lucide-react';
 
-type MenuItem = {
+export type MenuItem = {
   label: string;
   link: string;
   icon: LucideIcon;
@@ -17,9 +30,55 @@ export const MENU_ITEMS: MenuItem[] = [
     link: 'roles',
     icon: ShieldCheck,
   },
+];
+
+export const MENU_GUIDE_ITEMS: MenuItem[] = [
   {
     label: 'Города',
     link: 'cities',
+    icon: MapPin,
+  },
+  {
+    label: 'Районы',
+    link: 'districts',
+    icon: MapPinned,
+  },
+  {
+    label: 'Типы собственности',
+    link: 'property-types',
     icon: Building,
+  },
+  {
+    label: 'Ед. измерения',
+    link: 'units',
+    icon: Ruler,
+  },
+  {
+    label: 'Тип фасовки',
+    link: 'packages',
+    icon: Boxes,
+  },
+  {
+    label: 'Тип сладости',
+    link: 'confectionary-types',
+    icon: Candy,
+  },
+];
+
+export const MENU_TABLE_ITEMS: MenuItem[] = [
+  {
+    label: 'Магазины',
+    link: 'shops',
+    icon: Store,
+  },
+  {
+    label: 'Фабрики',
+    link: 'factories',
+    icon: Factory,
+  },
+  {
+    label: 'Поставки',
+    link: 'shipments',
+    icon: Truck,
   },
 ];

@@ -20,6 +20,6 @@ export type ProfileDto = {
   lastName: string;
   firstName: string;
   middleName: string;
-  avatarId: string | null;
+  avatarLink: string | null;
   role: string;
 };

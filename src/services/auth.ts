@@ -32,9 +32,4 @@ export class AuthService {
     }
     return response.data;
   }
-
-  static async profile(): Promise<ProfileDto> {
-    const response = await api.get<ProfileDto>('/auth/profile');
-    return response.data;
-  }
 }
