@@ -1,24 +1,19 @@
 'use client';
-import {
-  NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuItem,
-  NavigationMenuLink,
-} from '@radix-ui/react-navigation-menu';
+import { NavigationMenu } from '@radix-ui/react-navigation-menu';
 import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
-import { navigationMenuTriggerStyleFull } from '../ui/navigation-menu';
 import {
   MENU_GUIDE_ITEMS,
   MENU_ITEMS,
   MENU_TABLE_ITEMS,
+  MODERATOR_ITEMS,
 } from '@/consts/menu-items.consts';
 import SidebarAccountCard from './SidebarAccountCard';
 import SidebarMenuList from './SidebarMenuList';
 import { Accordion } from '../ui/accordion';
 
-export default function Sidebar() {
+export default function DashboardSidebar() {
   return (
     <aside className="border-r-2 px-8 flex flex-col gap-4">
       <Link href="/admin">
@@ -39,6 +34,7 @@ export default function Sidebar() {
       <NavigationMenu>
         {/* @ts-ignore */}
         <Accordion type="multiple">
+          <SidebarMenuList title="Модерация" items={MODERATOR_ITEMS} />
           <SidebarMenuList title="Пользователи" items={MENU_ITEMS} />
           <SidebarMenuList title="Таблицы" items={MENU_TABLE_ITEMS} />
           <SidebarMenuList title="Справочники" items={MENU_GUIDE_ITEMS} />

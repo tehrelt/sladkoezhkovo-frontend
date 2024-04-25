@@ -11,6 +11,7 @@ import {
   Store,
   Factory,
   Truck,
+  FileStack,
 } from 'lucide-react';
 
 export type MenuItem = {
@@ -18,6 +19,14 @@ export type MenuItem = {
   link: string;
   icon: LucideIcon;
 };
+
+export const MODERATOR_ITEMS: MenuItem[] = [
+  {
+    label: 'Заявки на регистрацию',
+    link: 'applications',
+    icon: FileStack,
+  },
+];
 
 export const MENU_ITEMS: MenuItem[] = [
   {

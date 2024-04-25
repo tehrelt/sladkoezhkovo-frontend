@@ -14,6 +14,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '../ui/accordion';
+import { DASHBOARD, PAGES } from '@/consts/pages.consts';
 
 interface Props {
   title: string;
@@ -29,7 +30,7 @@ export default function SidebarMenuList({ title, items }: Props) {
           {items.map((item) => (
             <NavigationMenuItem key={item.link} className="w-full">
               <Link
-                href={`/admin/${item.link}`}
+                href={`${PAGES.DASHBOARD}/${item.link}`}
                 className="w-full"
                 legacyBehavior
                 passHref

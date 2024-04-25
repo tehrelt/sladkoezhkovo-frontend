@@ -7,7 +7,7 @@ export const useUsers = () => {
     queryFn: UsersService.list,
   });
 
-  return { users: data, isLoading };
+  return { data, isLoading };
 };
 
 export const useUser = (id: string) => {
@@ -16,5 +16,5 @@ export const useUser = (id: string) => {
     queryFn: () => UsersService.find(id),
   });
 
-  return { user: data, isLoading };
+  return { data, isLoading };
 };

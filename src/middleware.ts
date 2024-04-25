@@ -1,16 +1,17 @@
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
 import { ROLES } from './consts/roles.consts';
+import { PAGES } from './consts/pages.consts';
 
 export async function middleware(request: NextRequest) {
   const { url, cookies } = request;
 
   const token = cookies.get('accessToken');
 
-  const isAdminPage = url.includes('/admin');
-  const isAuthPage = url.includes('/auth');
+  const isDashboardPage = url.includes(PAGES.DASHBOARD);
+  const isAuthPage = url.includes(PAGES.AUTH);
 
-  if (isAdminPage && !token) {
+  if (isDashboardPage && !token) {
     console.log('no token');
     return NextResponse.redirect(new URL('/', url));
   }
@@ -24,7 +25,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (isAdminPage) {
+  if (isDashboardPage) {
     try {
       const res = await fetch('http://localhost:4200/api/account', {
         headers: { Authorization: `Bearer ${token?.value}` },
@@ -32,8 +33,8 @@ export async function middleware(request: NextRequest) {
 
       const data = await res.json();
 
-      if (data.role !== ROLES.ADMIN) {
-        console.log('not an admin');
+      if (![ROLES.ADMIN, ROLES.MODERATOR].includes(data.role)) {
+        console.log('forbidden');
         return NextResponse.redirect(new URL('/', url));
       }
 
