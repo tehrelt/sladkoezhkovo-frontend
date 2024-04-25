@@ -51,7 +51,6 @@ function UsersTable({}: Props) {
         </CardHeader>
         <CardContent>
           <Table>
-            <TableCaption>Список пользователей</TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">Id</TableHead>
@@ -110,13 +109,20 @@ function UsersTable({}: Props) {
                     <TableRow key={u.id}>
                       <TableCell className="w-[150px]">
                         <Link
-                          href={`/admin/users/${u.id}`}
+                          href={`/admin/users/${u.handle}`}
                           className="hover:underline"
                         >
                           {u.id.substring(0, 13)}...
                         </Link>
                       </TableCell>
-                      <TableCell>{u.handle}</TableCell>
+                      <TableCell>
+                        <Link
+                          href={`/admin/users/${u.handle}`}
+                          className="hover:underline"
+                        >
+                          {u.handle}
+                        </Link>
+                      </TableCell>
                       <TableCell>{u.lastName}</TableCell>
                       <TableCell>{u.firstName}</TableCell>
                       <TableCell>{u.middleName}</TableCell>
