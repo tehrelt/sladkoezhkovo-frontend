@@ -6,5 +6,6 @@ export enum ROLES {
 
 export const LOCAL_ROLES: Record<ROLES, string> = {
   [ROLES.ADMIN]: 'Администратор',
+  [ROLES.MODERATOR]: 'Модератор',
   [ROLES.REGULAR]: 'Обычный пользователь',
 };

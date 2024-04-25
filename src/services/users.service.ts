@@ -2,8 +2,8 @@ import { api } from '@/api/axios.config';
 import { User } from '@/lib/types/user';
 
 export class UsersService {
-  static async list(): Promise<User[]> {
-    const res = await api.get<User[]>('/users');
+  static async list(role: string = ''): Promise<User[]> {
+    const res = await api.get<User[]>(`/users?role=${role}`);
     return res.data;
   }
 

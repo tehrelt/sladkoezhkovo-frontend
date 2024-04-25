@@ -1,6 +1,6 @@
 'use client';
 
-import { useUser } from '@/hooks/useUser';
+import { useProfile } from '@/hooks/useProfile';
 import React, { PropsWithChildren } from 'react';
 
 interface Props extends PropsWithChildren {
@@ -8,7 +8,7 @@ interface Props extends PropsWithChildren {
 }
 
 export default function RoleRequired({ roles, children }: Props) {
-  const { isLoading, user } = useUser();
+  const { isLoading, user } = useProfile();
 
   if (!roles) {
     return <>{children}</>;

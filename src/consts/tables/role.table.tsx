@@ -5,6 +5,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useRoles } from '@/hooks/dashboard/useRoles';
 import { localDate } from '@/lib/utils';
 import { DataTable } from '../tables.consts';
+import { LOCAL_ROLES } from '../roles.consts';
 
 export const ROLE_COLUMNS: ColumnDef<Role>[] = [
   {
@@ -22,6 +23,7 @@ export const ROLE_COLUMNS: ColumnDef<Role>[] = [
   {
     accessorKey: 'name',
     header: 'Роль',
+    cell: (cell) => <p>{LOCAL_ROLES[cell.getValue()] || cell.getValue()}</p>,
   },
   {
     accessorKey: 'createdAt',

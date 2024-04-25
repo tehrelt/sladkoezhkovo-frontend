@@ -1,7 +1,7 @@
 'use client';
 
 import { useLogout } from '@/hooks/useLogout';
-import { useUser } from '@/hooks/useUser';
+import { useProfile } from '@/hooks/useProfile';
 import { cn, fio } from '@/lib/utils';
 import React from 'react';
 import { Skeleton } from '../ui/skeleton';
@@ -55,7 +55,7 @@ function checkFileType(file: File) {
 export default function SidebarAccountCard({ className }: Props) {
   const { push } = useRouter();
 
-  const { isLoading, user, loggedOut } = useUser();
+  const { isLoading, user, loggedOut } = useProfile();
   const { logout } = useLogout();
 
   const form = useForm();

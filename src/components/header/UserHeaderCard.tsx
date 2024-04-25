@@ -1,5 +1,5 @@
 'use client';
-import { useUser } from '@/hooks/useUser';
+import { useProfile } from '@/hooks/useProfile';
 import Link from 'next/link';
 import React from 'react';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,7 @@ import { ROLES } from '@/consts/roles.consts';
 import { PAGES } from '@/consts/pages.consts';
 
 export default function UserHeaderCard() {
-  const { user, isLoading, loggedOut } = useUser();
+  const { user, isLoading, loggedOut } = useProfile();
   const { logout } = useLogout();
 
   if (isLoading) {

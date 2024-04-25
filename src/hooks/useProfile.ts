@@ -1,13 +1,13 @@
 import { AccountService } from '@/services/account.service';
 import { useQuery } from '@tanstack/react-query';
 
-export function useUser() {
-  const { data, isPending, isLoading, isFetching } = useQuery({
+export function useProfile() {
+  const { data, isLoading } = useQuery({
     queryKey: ['user'],
     queryFn: AccountService.profile,
   });
 
   const loggedOut = !data;
 
-  return { user: data, isPending, isLoading, loggedOut, isFetching };
+  return { user: data, isLoading, loggedOut };
 }
