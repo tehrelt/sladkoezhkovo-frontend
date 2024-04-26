@@ -1,4 +1,4 @@
-import { Role } from '@/lib/types/role';
+import { Role } from '@/lib/types/role.dto';
 import Link from 'next/link';
 import { DASHBOARD, PAGES } from '../pages.consts';
 import { ColumnDef } from '@tanstack/react-table';
@@ -37,7 +37,7 @@ export const ROLE_COLUMNS: ColumnDef<Role>[] = [
   },
 ];
 
-export const ROLE_TABLE: DataTable = {
+export const ROLE_TABLE: DataTable<Role> = {
   title: 'Роли',
   columns: ROLE_COLUMNS,
   // @ts-ignore

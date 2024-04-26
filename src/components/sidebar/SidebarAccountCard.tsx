@@ -118,7 +118,7 @@ export default function SidebarAccountCard({ className }: Props) {
               <DropdownMenuContent>
                 <DropdownMenuLabel> Мой аккаунт </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Редактировать профиль</DropdownMenuItem>
+                {/* <DropdownMenuItem>Редактировать профиль</DropdownMenuItem> */}
                 <DropdownMenuItem onClick={() => logout()}>
                   Выход
                 </DropdownMenuItem>

@@ -1,10 +1,11 @@
 import { api } from '@/api/axios.config';
 import { CreateRoleDto } from '@/lib/dto/role.dto';
-import { Role } from '@/lib/types/role';
+import { ListDto } from '@/lib/types/list.dto';
+import { Role } from '@/lib/types/role.dto';
 
 export class RoleService {
-  static async list(): Promise<Role[]> {
-    const response = await api.get<Role[]>('/roles');
+  static async list(): Promise<ListDto<Role>> {
+    const response = await api.get<ListDto<Role>>('/roles');
     return response.data;
   }
 

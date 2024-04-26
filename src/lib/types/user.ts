@@ -10,3 +10,8 @@ export interface User extends IBase, Iid {
   role: string;
   imageLink: string;
 }
+
+export interface UserList {
+  users: User[];
+  count: number;
+}

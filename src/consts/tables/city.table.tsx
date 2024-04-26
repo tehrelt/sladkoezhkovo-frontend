@@ -1,10 +1,11 @@
-import { Role } from '@/lib/types/role';
+import { Role } from '@/lib/types/role.dto';
 import Link from 'next/link';
 import { DASHBOARD, PAGES } from '../pages.consts';
 import { ColumnDef } from '@tanstack/react-table';
 import { localDate } from '@/lib/utils';
-import { DataTableOptions } from '@/lib/types/table-options';
+import { DataTableOptions } from '@/lib/types/options/table.options';
 import { useCities } from '@/hooks/dashboard/useCities';
+import { City } from '@/lib/types/city.dto';
 
 export const CITY_COLUMNS: ColumnDef<Role>[] = [
   {
@@ -35,7 +36,7 @@ export const CITY_COLUMNS: ColumnDef<Role>[] = [
   },
 ];
 
-export const CITY_TABLE: DataTableOptions = {
+export const CITY_TABLE: DataTableOptions<City> = {
   title: 'Города',
   columns: CITY_COLUMNS,
   // @ts-ignore

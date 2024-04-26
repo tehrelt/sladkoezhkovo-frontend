@@ -1,4 +1,5 @@
 export const PAGES = {
+  ROOT: '/',
   DASHBOARD: '/dashboard',
   AUTH: '/auth',
 };

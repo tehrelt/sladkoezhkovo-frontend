@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useLogout } from '@/hooks/useLogout';
 import { Skeleton } from '@/components/ui/skeleton';
 import RoleRequired from '../utils/RoleRequired';
-import { ROLES } from '@/consts/roles.consts';
+import { LOCAL_ROLES, ROLES } from '@/consts/roles.consts';
 import { PAGES } from '@/consts/pages.consts';
 
 export default function UserHeaderCard() {
@@ -42,7 +42,7 @@ export default function UserHeaderCard() {
               {user.lastName} {user.firstName} {user.middleName}
             </p>
             <p className="text-muted-foreground text-right">
-              @{user.handle} / {user.role}{' '}
+              @{user.handle} / {LOCAL_ROLES[user.role] || user.role}
             </p>
           </div>
 

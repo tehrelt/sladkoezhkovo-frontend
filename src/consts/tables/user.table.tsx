@@ -73,7 +73,7 @@ export const USERS_COLUMNS: ColumnDef<User>[] = [
   },
 ];
 
-export const USER_TABLE: DataTable = {
+export const USER_TABLE: DataTable<User> = {
   title: 'Пользователи',
   columns: USERS_COLUMNS,
   // @ts-ignore

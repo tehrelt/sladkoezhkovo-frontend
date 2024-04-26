@@ -1,4 +1,4 @@
-import { DataPageOptions } from '@/lib/types/data-page-options';
+import { DataPageOptions } from '@/lib/types/options/data-page.options';
 import { USER_PAGE } from './user.page';
 import { role_PAGE } from './role.page';
 

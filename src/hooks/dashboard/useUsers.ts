@@ -1,10 +1,10 @@
-import { UsersService } from '@/services/users.service';
+import { UserService } from '@/services/user.service';
 import { useQuery } from '@tanstack/react-query';
 
 export const useUsers = () => {
   const { data, isLoading } = useQuery({
     queryKey: ['users'],
-    queryFn: () => UsersService.list(),
+    queryFn: () => UserService.list(),
   });
 
   return { data, isLoading };
@@ -13,7 +13,7 @@ export const useUsers = () => {
 export const useUser = (id: string) => {
   const { data, isLoading } = useQuery({
     queryKey: ['users', id],
-    queryFn: () => UsersService.find(id),
+    queryFn: () => UserService.find(id),
   });
 
   return { data, isLoading };

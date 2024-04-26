@@ -20,6 +20,8 @@ import {
 } from '@/components/ui/table';
 import { DataTable } from '@/components/data-table';
 import { Skeleton } from '@/components/ui/skeleton';
+import { LoadingDataTable } from '@/components/data-table/LoadingDataTable';
+import Link from 'next/link';
 
 function DashboardTableView({ table }: { table: string }) {
   const { columns, useData, title, afterTableContent, beforeTableContent } =
@@ -33,8 +35,8 @@ function DashboardTableView({ table }: { table: string }) {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href={PAGES.DASHBOARD}>
-                Панель управления
+              <BreadcrumbLink>
+                <Link href={PAGES.DASHBOARD}>Панель управления</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />

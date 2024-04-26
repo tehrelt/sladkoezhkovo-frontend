@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 import DashboardTableView from './table';
+import { tableExists } from '@/consts/tables';
 
 interface Props {
   params: {
@@ -10,7 +11,11 @@ interface Props {
 const Page: NextPage<Props> = ({ params: { table } }) => {
   return (
     <div>
-      <DashboardTableView table={table} />
+      {tableExists(table) ? (
+        <DashboardTableView table={table} />
+      ) : (
+        <p>Таблицы не существует</p>
+      )}
     </div>
   );
 };

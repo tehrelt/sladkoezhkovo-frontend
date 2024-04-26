@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
-import { AuthService } from '@/services/auth';
+import { AuthService } from '@/services/auth.service';
 import { SignInDto } from '@/lib/dto/auth.dto';
 import { toast } from 'sonner';
 import { z } from 'zod';

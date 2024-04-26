@@ -20,10 +20,11 @@ import {
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { useState } from 'react';
+import { ListDto } from '@/lib/types/list.dto';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  data: ListDto<TData>;
 }
 
 export function DataTable<TData, TValue>({
@@ -33,7 +34,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
-    data,
+    data: data.items,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -43,6 +44,10 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
   });
+
+  if (!data.items) {
+    return <>Error</>;
+  }
 
   return (
     <div>
@@ -60,23 +65,29 @@ export function DataTable<TData, TValue>({
           />
         </div>
         <div className="flex items-center justify-end space-x-2 py-4">
-          <p>Страница: {table.getPage}</p>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Предыдущая
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Следующая
-          </Button>
+          <div>
+            <p className="text-muted-foreground text-end">
+              Всего записей: {data.count}
+            </p>
+            <div className="flex space-x-2 py-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                Предыдущая
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                Следующая
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
       <div className="rounded-md border">

@@ -12,11 +12,12 @@ import {
 import SidebarAccountCard from './SidebarAccountCard';
 import SidebarMenuList from './SidebarMenuList';
 import { Accordion } from '../ui/accordion';
+import { PAGES } from '@/consts/pages.consts';
 
 export default function DashboardSidebar() {
   return (
     <aside className="border-r-2 px-8 flex flex-col gap-4">
-      <Link href="/admin">
+      <Link href={PAGES.ROOT}>
         <div className="flex flex-col justify-center items-center">
           <Image
             src="/sladkoezhkovo.jpeg"

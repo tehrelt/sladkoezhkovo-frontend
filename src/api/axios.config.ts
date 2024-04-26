@@ -1,5 +1,5 @@
 import { AccessTokenService } from '@/services/access-token';
-import { AuthService } from '@/services/auth';
+import { AuthService } from '@/services/auth.service';
 import axios from 'axios';
 
 const api = axios.create({

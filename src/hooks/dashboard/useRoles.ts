@@ -1,4 +1,4 @@
-import { RoleService } from '@/services/roles';
+import { RoleService } from '@/services/role.service';
 import { useQuery } from '@tanstack/react-query';
 
 export const useRoles = () => {
