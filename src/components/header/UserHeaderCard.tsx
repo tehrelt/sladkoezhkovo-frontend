@@ -92,6 +92,11 @@ export default function UserHeaderCard() {
                   <Link href={`${PAGES.ADD_SHOP}`}>Добавить магазин</Link>
                 </DropdownMenuItem>
               </RoleRequired>
+              <RoleRequired roles={['FACTORY_OWNER']}>
+                <DropdownMenuItem>
+                  <Link href={`${PAGES.ADD_FACTORY}`}>Добавить фабрику</Link>
+                </DropdownMenuItem>
+              </RoleRequired>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => logout()}>
                 Выход

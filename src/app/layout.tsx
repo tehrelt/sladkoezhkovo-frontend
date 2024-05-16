@@ -36,7 +36,7 @@ export default function RootLayout({
         <Providers>
           <div className="flex flex-col min-h-screen justify-between">
             <LayoutProvider>
-              <main className="flex-1">{children}</main>
+              <main className="flex-1 container">{children}</main>
               <Toaster theme="light" position="bottom-left" duration={1500} />
             </LayoutProvider>
           </div>

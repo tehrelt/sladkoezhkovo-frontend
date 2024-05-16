@@ -2,10 +2,10 @@ export const PAGES = {
   ROOT: '/',
   DASHBOARD: '/dashboard',
   AUTH: '/auth',
-  PROFILE: '/profile',
 
-  ADD_SHOP: '/add-shop',
-  ADD_FACTORY: '/add-factory',
+  PROFILE: '/profile',
+  ADD_SHOP: '/profile/add-shop',
+  ADD_FACTORY: '/profile/add-factory',
 };
 
 export const DASHBOARD = {
