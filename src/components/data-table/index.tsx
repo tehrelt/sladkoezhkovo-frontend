@@ -1,5 +1,4 @@
 'use client';
-
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -53,7 +52,7 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="flex justify-between">
         <div className="flex items-center py-4">
-          <Input
+          {/* <Input
             placeholder="Filter handle..."
             value={
               (table.getColumn('handle')?.getFilterValue() as string) ?? ''
@@ -62,7 +61,7 @@ export function DataTable<TData, TValue>({
               table.getColumn('handle')?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
-          />
+          /> */}
         </div>
         <div className="flex items-center justify-end space-x-2 py-4">
           <div>

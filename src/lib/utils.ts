@@ -15,13 +15,11 @@ export function fio({
   firstName: string;
   middleName: string;
 }) {
-  return [
-    lastName,
-    firstName.charAt(0).toUpperCase() + '.',
-    middleName.charAt(0).toUpperCase() + '.',
-  ].join(' ');
+  return [lastName, firstName.charAt(0) + '.', middleName.charAt(0) + '.'].join(
+    ' ',
+  );
 }
 
-export function localDate(date: Date): string {
-  return dayjs(date).format('DD/MM/YYYY HH:mm:ss');
+export function datef(date: Date, format?: string): string {
+  return dayjs(date).format(format ?? 'DD/MM/YYYY HH:mm:ss');
 }

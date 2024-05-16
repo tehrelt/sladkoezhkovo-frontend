@@ -4,5 +4,5 @@ export interface Iid {
 
 export interface IBase {
   createdAt: Date;
-  updatedAt: Date | null;
+  updatedAt?: Date | null;
 }

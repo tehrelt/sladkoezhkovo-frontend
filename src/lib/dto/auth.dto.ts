@@ -1,3 +1,5 @@
+import { ROLE } from '@/consts/roles.consts';
+
 export type SignInDto = {
   login: string;
   password: string;
@@ -14,12 +16,12 @@ export type AuthResponseDto = {
 };
 
 export type ProfileDto = {
+  imageLink?: string;
   id: string;
   handle: string;
   email: string;
   lastName: string;
   firstName: string;
   middleName: string;
-  avatarLink: string | null;
-  role: string;
+  role: ROLE;
 };

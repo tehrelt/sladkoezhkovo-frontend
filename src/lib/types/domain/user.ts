@@ -1,13 +1,14 @@
-import { IBase, Iid } from './base';
+import { ROLE } from '@/consts/roles.consts';
+import { DomainEntity } from './domain.dto';
 
-export interface User extends IBase, Iid {
+export interface User extends DomainEntity {
   handle: string;
   email: string;
   password: string;
   firstName: string;
   lastName: string;
   middleName: string;
-  role: string;
+  role: ROLE;
   imageLink: string;
 }
 

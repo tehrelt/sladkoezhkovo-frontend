@@ -16,7 +16,7 @@ import { PAGES } from '@/consts/pages.consts';
 
 export default function DashboardSidebar() {
   return (
-    <aside className="border-r-2 px-8 flex flex-col gap-4">
+    <aside className="border-r-2 px-8 flex flex-col gap-4 overflow-hidden">
       <Link href={PAGES.ROOT}>
         <div className="flex flex-col justify-center items-center">
           <Image

@@ -1,15 +1,8 @@
-export enum ROLES {
-  ADMIN = 'admin',
-  MODERATOR = 'moderator',
-  SHOP_OWNER = 'shop_owner',
-  FACTORY_OWNER = 'factory_owner',
-  REGULAR = 'regular',
-}
+export type ROLE = 'ADMIN' | 'MODERATOR' | 'SHOP_OWNER' | 'FACTORY_OWNER';
 
-export const LOCAL_ROLES: Record<ROLES, string> = {
-  [ROLES.ADMIN]: 'Администратор',
-  [ROLES.MODERATOR]: 'Модератор',
-  [ROLES.SHOP_OWNER]: 'Владелец магазина',
-  [ROLES.FACTORY_OWNER]: 'Владелец фабрики',
-  [ROLES.REGULAR]: 'Обычный пользователь',
+export const LOCAL_ROLES: Record<ROLE, string> = {
+  ADMIN: 'Администратор',
+  MODERATOR: 'Модератор',
+  SHOP_OWNER: 'Владелец магазина',
+  FACTORY_OWNER: 'Владелец фабрики',
 };

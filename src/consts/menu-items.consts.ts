@@ -12,6 +12,8 @@ import {
   Factory,
   Truck,
   FileStack,
+  Barcode,
+  ScrollText,
 } from 'lucide-react';
 
 export type MenuItem = {
@@ -34,11 +36,11 @@ export const MENU_ITEMS: MenuItem[] = [
     link: 'users',
     icon: Users,
   },
-  {
-    label: 'Роли',
-    link: 'roles',
-    icon: ShieldCheck,
-  },
+  // {
+  //   label: 'Роли',
+  //   link: 'roles',
+  //   icon: ShieldCheck,
+  // },
 ];
 
 export const MENU_GUIDE_ITEMS: MenuItem[] = [
@@ -84,6 +86,16 @@ export const MENU_TABLE_ITEMS: MenuItem[] = [
     label: 'Фабрики',
     link: 'factories',
     icon: Factory,
+  },
+  {
+    label: 'Продукция',
+    link: 'products',
+    icon: Barcode,
+  },
+  {
+    label: 'Каталог',
+    link: 'catalogue',
+    icon: ScrollText,
   },
   {
     label: 'Поставки',

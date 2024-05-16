@@ -1,14 +1,14 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DASHBOARD, PAGES } from '@/consts/pages.consts';
 import { LOCAL_ROLES } from '@/consts/roles.consts';
-import { User } from '@/lib/types/user';
-import { localDate } from '@/lib/utils';
+import { User } from '@/lib/types/domain/user';
+import { datef } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
-import { DataTable } from '../tables.consts';
 import { useUsers } from '@/hooks/dashboard/useUsers';
+import { DataTableOptions } from '@/lib/types/options/table.options';
 
-export const USERS_COLUMNS: ColumnDef<User>[] = [
+const COLUMNS: ColumnDef<User>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
@@ -55,8 +55,11 @@ export const USERS_COLUMNS: ColumnDef<User>[] = [
       const link = cell.getValue();
       return (
         <Avatar>
-          <AvatarImage src={link || undefined} />
-          <AvatarFallback>A</AvatarFallback>
+          <AvatarImage src={(link as string) || undefined} />
+          <AvatarFallback>
+            {/* @ts-ignore */}
+            {cell.row.getValue('handle').charAt(0)}
+          </AvatarFallback>
         </Avatar>
       );
     },
@@ -64,18 +67,18 @@ export const USERS_COLUMNS: ColumnDef<User>[] = [
   {
     accessorKey: 'createdAt',
     header: 'Дата регистрации',
-    cell: (cell) => <p>{localDate(cell.getValue())}</p>,
+    cell: (cell) => <p>{datef(cell.getValue())}</p>,
   },
   {
     accessorKey: 'updatedAt',
     header: 'Дата обновления',
-    cell: (cell) => <p>{cell.getValue() ? localDate(cell.getValue()) : '-'}</p>,
+    cell: (cell) => <p>{cell.getValue() ? datef(cell.getValue()) : '-'}</p>,
   },
 ];
 
-export const USER_TABLE: DataTable<User> = {
+export const USER_TABLE: DataTableOptions<User> = {
   title: 'Пользователи',
-  columns: USERS_COLUMNS,
+  columns: COLUMNS,
   // @ts-ignore
   useData: useUsers,
 };

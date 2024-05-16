@@ -1,10 +1,11 @@
 'use client';
 
+import { ROLE } from '@/consts/roles.consts';
 import { useProfile } from '@/hooks/useProfile';
 import React, { PropsWithChildren } from 'react';
 
 interface Props extends PropsWithChildren {
-  roles?: string[];
+  roles?: ROLE[];
 }
 
 export default function RoleRequired({ roles, children }: Props) {

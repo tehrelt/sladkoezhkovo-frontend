@@ -1,13 +1,13 @@
-import { Role } from '@/lib/types/role.dto';
 import Link from 'next/link';
 import { DASHBOARD, PAGES } from '../pages.consts';
 import { ColumnDef } from '@tanstack/react-table';
-import { localDate } from '@/lib/utils';
+import { datef } from '@/lib/utils';
 import { DataTableOptions } from '@/lib/types/options/table.options';
 import { useCities } from '@/hooks/dashboard/useCities';
-import { City } from '@/lib/types/city.dto';
+import { City } from '@/lib/types/domain/city.dto';
+import CreateCityForm from '@/components/forms/create/CreateCityForm';
 
-export const CITY_COLUMNS: ColumnDef<Role>[] = [
+const COLUMNS: ColumnDef<City>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
@@ -27,18 +27,19 @@ export const CITY_COLUMNS: ColumnDef<Role>[] = [
   {
     accessorKey: 'createdAt',
     header: 'Создан ',
-    cell: (cell) => <p>{localDate(cell.getValue())}</p>,
+    cell: (cell) => <p>{datef(cell.getValue())}</p>,
   },
   {
     accessorKey: 'updatedAt',
     header: 'Обновлён',
-    cell: (cell) => <p>{cell.getValue() ? localDate(cell.getValue()) : '-'}</p>,
+    cell: (cell) => <p>{cell.getValue() ? datef(cell.getValue()) : '-'}</p>,
   },
 ];
 
 export const CITY_TABLE: DataTableOptions<City> = {
   title: 'Города',
-  columns: CITY_COLUMNS,
+  columns: COLUMNS,
   // @ts-ignore
   useData: useCities,
+  createForm: <CreateCityForm />,
 };

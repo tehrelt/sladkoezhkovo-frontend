@@ -36,7 +36,7 @@ import Link from 'next/link';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { ApplicationService } from '@/services/application.service';
-import { LOCAL_ROLES, ROLES } from '@/consts/roles.consts';
+import { LOCAL_ROLES, ROLE } from '@/consts/roles.consts';
 
 type Props = {};
 
@@ -98,11 +98,11 @@ const ApplicationForm = (props: Props) => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value={ROLES.SHOP_OWNER}>
-                          {LOCAL_ROLES[ROLES.SHOP_OWNER]}
+                        <SelectItem value={'SHOP_OWNER'}>
+                          {LOCAL_ROLES['SHOP_OWNER']}
                         </SelectItem>
-                        <SelectItem value={ROLES.FACTORY_OWNER}>
-                          {LOCAL_ROLES[ROLES.FACTORY_OWNER]}
+                        <SelectItem value={'FACTORY_OWNER'}>
+                          {LOCAL_ROLES['FACTORY_OWNER']}
                         </SelectItem>
                       </SelectContent>
                     </Select>

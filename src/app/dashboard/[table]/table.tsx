@@ -20,12 +20,18 @@ import {
 } from '@/components/ui/table';
 import { DataTable } from '@/components/data-table';
 import { Skeleton } from '@/components/ui/skeleton';
-import { LoadingDataTable } from '@/components/data-table/LoadingDataTable';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 function DashboardTableView({ table }: { table: string }) {
-  const { columns, useData, title, afterTableContent, beforeTableContent } =
-    DATA_TABLES[table];
+  const {
+    columns,
+    useData,
+    title,
+    afterTableContent,
+    beforeTableContent,
+    createForm,
+  } = DATA_TABLES[table];
 
   const { data, isLoading } = useData();
 
@@ -47,6 +53,7 @@ function DashboardTableView({ table }: { table: string }) {
         </Breadcrumb>
       </div>
       {afterTableContent ? afterTableContent : ''}
+      <div className="">{!isLoading && createForm}</div>
       {isLoading ? (
         <Table>
           <TableHeader>

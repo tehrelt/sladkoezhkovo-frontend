@@ -1,7 +1,7 @@
 import { api } from '@/api/axios.config';
 import { AccessTokenService } from './access-token';
 import { AuthResponseDto, ProfileDto, SignInDto } from '@/lib/dto/auth.dto';
-import { User } from '@/lib/types/user';
+import { User } from '@/lib/types/domain/user';
 
 export class AuthService {
   static async signIn({ login, password }: SignInDto) {

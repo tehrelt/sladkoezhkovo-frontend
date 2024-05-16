@@ -11,16 +11,19 @@ import Image from 'next/image';
 import { navigationMenuTriggerStyle } from '../ui/navigation-menu';
 import UserHeaderCard from './UserHeaderCard';
 import { cn } from '@/lib/utils';
+import { useProfile } from '@/hooks/useProfile';
 
 type Props = {
   className?: string;
 };
 
 function Header({ className }: Props) {
+  const profile = useProfile();
+
   return (
     <header
       className={cn(
-        'flex justify-between py-2 px-48 border border-b-1 items-center space-x-12',
+        'flex justify-between py-2 px-48 border border-b-1 items-center space-x-12 mb-8',
         className,
       )}
     >
@@ -33,20 +36,28 @@ function Header({ className }: Props) {
       <div className="flex-1 flex justify-center">
         <NavigationMenu>
           <NavigationMenuList>
-            <NavigationMenuItem>
-              <Link href="#" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Главная
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="#join" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Присоединиться
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
+            {profile.loggedOut && (
+              <>
+                <NavigationMenuItem>
+                  <Link href="/#" legacyBehavior passHref>
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      Главная
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <Link href="/#join" legacyBehavior passHref>
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      Присоединиться
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+              </>
+            )}
           </NavigationMenuList>
         </NavigationMenu>
       </div>

@@ -8,5 +8,5 @@ export const applicationForm = z.object({
   email: z.string().email(),
   role: z
     .string()
-    .refine((role) => role === 'factory_owner' || role === 'shop_owner'),
+    .refine((role) => role === 'FACTORY_OWNER' || role === 'SHOP_OWNER'),
 });
