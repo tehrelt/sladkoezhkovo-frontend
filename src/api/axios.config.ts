@@ -19,6 +19,7 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (config) => config,
   async (error) => {
+    console.log(error.response.status);
     if (error.response.status === 401 && !error.config._isRetry) {
       const originalRequest = error.config;
       originalRequest._isRetry = true;
@@ -30,7 +31,7 @@ api.interceptors.response.use(
         AccessTokenService.remove();
       }
     }
-    return error;
+    throw error;
   },
 );
 

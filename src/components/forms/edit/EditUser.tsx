@@ -3,7 +3,7 @@ import { User } from '@/lib/types/domain/user';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,7 +14,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../ui/form';
+} from '../../ui/form';
 import {
   SheetTrigger,
   SheetContent,
@@ -23,9 +23,9 @@ import {
   SheetFooter,
   SheetClose,
   Sheet,
-} from '../ui/sheet';
+} from '../../ui/sheet';
 import { Pencil } from 'lucide-react';
-import { Input } from '../ui/input';
+import { Input } from '../../ui/input';
 import { UserService } from '@/services/user.service';
 
 type Props = {

@@ -11,7 +11,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '../ui/separator';
 import { LOCAL_ROLES } from '@/consts/roles.consts';
-import EditUser from '../forms/EditUser';
+import EditUser from '../forms/edit/EditUser';
 import { LoadingDataTable } from '../data-table/LoadingDataTable';
 
 type Props = {

@@ -1,4 +1,6 @@
 'use client';
+import EditFactoryForm from '@/components/forms/edit/EditFactory';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -11,7 +13,7 @@ import Mention from '@/components/ui/mention';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useFactory, useFactoryProducts } from '@/hooks/useFactory';
 import { useProfile } from '@/hooks/useProfile';
-import { Car, MapPinned, Phone, User } from 'lucide-react';
+import { MapPinned, Phone, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -34,12 +36,10 @@ const FactoryOverviewPage = ({ handle }: Props) => {
           <CardHeader className="flex flex-row justify-between items-center">
             <div className="flex gap-x-4">
               {factory?.image && (
-                <Image
-                  src={factory.image}
-                  alt={`${factory?.name}`}
-                  width={96}
-                  height={96}
-                />
+                <Avatar className="w-[64px] h-[64px]">
+                  <AvatarImage src={factory.image} />
+                  <AvatarFallback></AvatarFallback>
+                </Avatar>
               )}
               <div className="">
                 <CardTitle className="flex justify-between items-center">
@@ -58,7 +58,7 @@ const FactoryOverviewPage = ({ handle }: Props) => {
               {!profileLoading && isOwner && (
                 <>
                   <Button>Статистика</Button>
-                  <Button>Редактировать</Button>
+                  <EditFactoryForm factory={factory!} />
                   <Link href={`/factory/${factory?.handle}/create`}>
                     <Button>Зарегистрировать продукт</Button>
                   </Link>

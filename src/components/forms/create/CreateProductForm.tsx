@@ -34,8 +34,7 @@ import {
 } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { useFactory, useProfileFactories } from '@/hooks/useFactory';
-import { Avatar } from '@radix-ui/react-avatar';
-import { AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { CreateProductDto } from '@/lib/dto/create-product.dto';
 import { ProductService } from '@/services/product.service';
 
@@ -85,6 +84,7 @@ const CreateProductForm = ({ factoryHandle }: Props) => {
                 <FormLabel>Фабрика</FormLabel>
                 <div className="border py-2 px-2 rounded-sm text-sm text-muted-foreground flex items-center gap-x-2">
                   <Avatar className="w-[32px] h-[32px]">
+                    <AvatarImage src={factory?.image} />
                     <AvatarFallback>{factory?.handle}</AvatarFallback>
                   </Avatar>
                   {factory?.name}
