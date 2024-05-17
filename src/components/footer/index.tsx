@@ -6,7 +6,7 @@ export const Footer = ({ className }: { className?: string }) => {
     <div
       className={cn(
         className,
-        'py-4 bg-slate-900 text-white flex flex-col items-center justify-center italic',
+        'py-4 bg-slate-900 text-white flex flex-col items-center justify-center italic mt-4',
       )}
     >
       <p>Разработано студентом группы ПИ-21а</p>

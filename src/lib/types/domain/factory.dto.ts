@@ -13,4 +13,5 @@ export interface Factory extends DomainEntity {
   city: City;
   year: number;
   phoneNumber: string;
+  image?: string;
 }

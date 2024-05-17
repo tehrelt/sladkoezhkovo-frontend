@@ -24,19 +24,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const headersList = headers();
-  const path = headersList.get('referer') || '';
-  const specificRoute = '/dashboard';
-
-  console.log('path', path, 'includes?', path.includes(specificRoute));
-
   return (
     <html lang="en">
       <body className={cn(inter.className, 'h-screen')}>
         <Providers>
           <div className="flex flex-col min-h-screen justify-between">
             <LayoutProvider>
-              <main className="flex-1 container">{children}</main>
+              {children}
               <Toaster theme="light" position="bottom-left" duration={1500} />
             </LayoutProvider>
           </div>

@@ -3,6 +3,7 @@
 import React from 'react';
 import {
   Card,
+  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -11,6 +12,7 @@ import { useProfile } from '@/hooks/useProfile';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useProfileFactories } from '@/hooks/useFactory';
+import Link from 'next/link';
 
 type Props = {};
 
@@ -55,29 +57,34 @@ const Profile = (props: Props) => {
             </CardDescription>
           </CardHeader>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Ваши фабрики:</CardTitle>
-          </CardHeader>
-          <CardDescription>
-            {factoriesLoading ? (
-              <>Loading...</>
-            ) : (
-              <ul className="list-disc pl-4">
-                {factories?.items.map((factory) => (
-                  <li key={factory.id}>
-                    <a href={`/factory/${factory.handle}`}>{factory.name}</a>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardDescription>
-        </Card>
       </div>
       <div className="flex-1">
-        <Card>
-          <CardHeader></CardHeader>
-        </Card>
+        <p className="text-2xl font-bold">Владения</p>
+        <div className="grid grid-cols-3 gap-x-4 gap-y-4">
+          {factoriesLoading ? (
+            <>Loading...</>
+          ) : (
+            factories?.items.map((factory) => (
+              // eslint-disable-next-line react/jsx-key
+              <Link
+                href={`/factory/${factory.handle}`}
+                className="hover:underline"
+              >
+                <Card className="h-full ">
+                  <CardHeader className="flex flex-col items-center justify-between h-full space-y-2">
+                    <Avatar className="w-16 h-16">
+                      <AvatarImage src={factory.image} />
+                      <AvatarFallback />
+                    </Avatar>
+                    <div className="w-full">
+                      <CardTitle className="text-lg">{factory.name}</CardTitle>
+                    </div>
+                  </CardHeader>
+                </Card>
+              </Link>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

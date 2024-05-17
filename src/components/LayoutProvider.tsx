@@ -13,7 +13,9 @@ export const LayoutProvider = ({ children }: { children: ReactNode }) => {
   return (
     <>
       {!pathname.includes(forbidden) && <Header className="flex-none" />}
-      {children}
+      <main className={!pathname.includes(forbidden) ? 'flex-1 container' : ''}>
+        {children}
+      </main>
       {!pathname.includes(forbidden) && <Footer className="flex-none" />}
     </>
   );

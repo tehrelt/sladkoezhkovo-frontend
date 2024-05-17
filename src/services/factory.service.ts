@@ -1,5 +1,6 @@
 import { api } from '@/api/axios.config';
 import { Factory } from '@/lib/types/domain/factory.dto';
+import { Product } from '@/lib/types/domain/product.dto';
 import { ListDto } from '@/lib/types/list.dto';
 
 export class FactoryService {

@@ -41,6 +41,9 @@ import { AccountService } from '@/services/account.service';
 import { toast } from 'sonner';
 import { PropertyType } from '@/lib/types/domain/property-type.dto';
 import { PropertyTypeService } from '@/services/property-type.service';
+import { useCities } from '@/hooks/dashboard/useCities';
+import { usePropertyTypes } from '@/hooks/dashboard/usePropertyTypes';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type Props = {};
 
@@ -53,6 +56,9 @@ const zForm = z.object({
   year: z
     .string()
     .refine((v) => Number(v) >= 1700 && Number(v) <= new Date().getFullYear()),
+  file: z.instanceof(File).refine((file) => file.size < 7 << 20, {
+    message: 'Размер фото не должен превышать 7MB.',
+  }),
 });
 
 const CreateFactoryForm = (props: Props) => {
@@ -60,19 +66,8 @@ const CreateFactoryForm = (props: Props) => {
     resolver: zodResolver(zForm),
   });
 
-  const [cities, setCities] = useState<City[]>([]);
-  const [ptpt, setPtpt] = useState<PropertyType[]>([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const cities = await CityService.list();
-      setCities(cities.items);
-
-      const ptpt = await PropertyTypeService.list();
-      setPtpt(ptpt.items);
-    };
-
-    fetchData();
-  }, []);
+  const { data: cities, isLoading: citiesLoading } = useCities();
+  const { data: ptpt, isLoading: ptptLoading } = usePropertyTypes();
 
   const { mutate } = useMutation({
     mutationKey: ['factories', 'create'],
@@ -99,7 +94,7 @@ const CreateFactoryForm = (props: Props) => {
             <CardHeader>
               <CardTitle>Добавить фабрику</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <FormField
                 name="name"
                 control={form.control}
@@ -140,18 +135,29 @@ const CreateFactoryForm = (props: Props) => {
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
+                      disabled={citiesLoading}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Выберите город" />
+                          <SelectValue
+                            placeholder={
+                              citiesLoading ? 'Загрузка...' : 'Выберите город'
+                            }
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {cities.map((city: City) => (
-                          <SelectItem key={city.id} value={city.id}>
-                            {city.name}
-                          </SelectItem>
-                        ))}
+                        {citiesLoading
+                          ? [1, 2, 3].map((i) => (
+                              <SelectItem key={i} value={i.toString()}>
+                                <Skeleton className="w-[256px] h-[16px]" />
+                              </SelectItem>
+                            ))
+                          : cities?.items.map((city: City) => (
+                              <SelectItem key={city.id} value={city.id}>
+                                {city.name}
+                              </SelectItem>
+                            ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -168,18 +174,31 @@ const CreateFactoryForm = (props: Props) => {
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
+                      disabled={ptptLoading}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Выберите тип собственности" />
+                          <SelectValue
+                            placeholder={
+                              ptptLoading
+                                ? 'Загрузка...'
+                                : 'Выберите тип собственности'
+                            }
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {ptpt.map((pt: PropertyType) => (
-                          <SelectItem key={pt.id} value={pt.id}>
-                            {pt.name}
-                          </SelectItem>
-                        ))}
+                        {ptptLoading
+                          ? [1, 2, 3].map((i) => (
+                              <SelectItem key={i} value={i.toString()}>
+                                <Skeleton className="w-[256px] h-[16px]" />
+                              </SelectItem>
+                            ))
+                          : ptpt?.items.map((pt: PropertyType) => (
+                              <SelectItem key={pt.id} value={pt.id}>
+                                {pt.name}
+                              </SelectItem>
+                            ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -225,24 +244,49 @@ const CreateFactoryForm = (props: Props) => {
                 )}
               />
 
-              <FormField
-                name="year"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Год открытия</FormLabel>
-                    <InputOTP maxLength={4} {...field}>
-                      <InputOTPGroup>
-                        <InputOTPSlot index={0} />
-                        <InputOTPSlot index={1} />
-                        <InputOTPSlot index={2} />
-                        <InputOTPSlot index={3} />
-                      </InputOTPGroup>
-                    </InputOTP>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="flex justify-between gap-x-4">
+                <FormField
+                  name="year"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Год открытия</FormLabel>
+                      <InputOTP maxLength={4} {...field}>
+                        <InputOTPGroup>
+                          <InputOTPSlot index={0} />
+                          <InputOTPSlot index={1} />
+                          <InputOTPSlot index={2} />
+                          <InputOTPSlot index={3} />
+                        </InputOTPGroup>
+                      </InputOTP>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="file"
+                  render={({ field: { value, onChange, ...fieldProps } }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Фото</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...fieldProps}
+                          type="file"
+                          accept="image/png, image/gif, image/jpeg"
+                          onChange={(event) =>
+                            onChange(
+                              event.target.files && event.target.files[0],
+                            )
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </CardContent>
             <CardFooter className="flex justify-end">
               <Button type="submit">Добавить</Button>

@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AuthService } from '@/services/auth.service';
 import { SignInDto } from '@/lib/dto/auth.dto';
 import { toast } from 'sonner';
@@ -28,6 +28,7 @@ export default function Auth() {
   });
 
   const { push } = useRouter();
+  const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
     mutationKey: ['auth'],
@@ -36,6 +37,7 @@ export default function Auth() {
       toast('Успешная авторизация');
       form.reset();
       push('/');
+      queryClient.invalidateQueries({ queryKey: ['user'] });
     },
     onError: (error) => {
       toast(error.message);
