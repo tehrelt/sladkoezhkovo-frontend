@@ -1,15 +1,21 @@
+import { FiltersDto } from '@/lib/filters/index.dto';
 import { ConfectionaryTypeService } from '@/services/confectionary-type.service';
-import { UnitService } from '@/services/unit.service';
 import { useQuery } from '@tanstack/react-query';
 
-export const useConfectionaryTypes = () => {
+export function useUsers(f?: FiltersDto) {
+  const key = ['confectionary-types'];
+  if (f) {
+    f.limit && key.push(f.limit.toString());
+    f.page && key.push(f.page.toString());
+  }
+
   const { data, isLoading } = useQuery({
-    queryKey: ['confectionaryTypes'],
-    queryFn: ConfectionaryTypeService.list,
+    queryKey: key,
+    queryFn: () => ConfectionaryTypeService.list(f),
   });
 
-  return { data, isLoading };
-};
+  return { data, isLoading, queryKey: key };
+}
 
 export const useConfectionaryType = (id: string) => {
   const { data, isLoading } = useQuery({

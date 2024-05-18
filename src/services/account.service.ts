@@ -10,6 +10,7 @@ export class AccountService {
     const { data } = await api.get<ListDto<Factory>>('/account/factories');
     return data;
   }
+
   static async createFactory(dto: CreateFactoryDto): Promise<Factory> {
     const data = new FormData();
 
@@ -33,16 +34,9 @@ export class AccountService {
     }
     return response.data;
   }
+
   static async profile(): Promise<ProfileDto> {
     const response = await api.get<ProfileDto>('/account');
-    return response.data;
-  }
-
-  static async updateAvatar(data): Promise<UpdateAvatarResponse> {
-    const response = await api.patch<UpdateAvatarResponse>(
-      '/account/avatar',
-      data,
-    );
     return response.data;
   }
 }

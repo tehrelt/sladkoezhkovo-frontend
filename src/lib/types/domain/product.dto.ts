@@ -1,3 +1,4 @@
+import { CatalogueEntry } from './catalogue-entry.dto';
 import { ConfectionaryType } from './confectionary-type.dto';
 import { DomainEntity } from './domain.dto';
 import { Factory } from './factory.dto';
@@ -7,4 +8,5 @@ export interface Product extends DomainEntity {
   confectionaryType: ConfectionaryType;
   factory: Factory;
   image: string;
+  catalogueEntries?: CatalogueEntry[];
 }

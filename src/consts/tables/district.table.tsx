@@ -5,7 +5,7 @@ import { datef } from '@/lib/utils';
 import { DataTableOptions } from '@/lib/types/options/table.options';
 import { District } from '@/lib/types/domain/district.dto';
 import { useDistricts } from '@/hooks/dashboard/useDistricts';
-import { CreateDistrictForm } from '@/components/forms/create/CreateDistrictForm';
+import { CreateDistrictForm } from '@/components/forms/create/dashboard/CreateDistrictForm';
 
 const COLUMNS: ColumnDef<District>[] = [
   {

@@ -6,7 +6,7 @@ import { DataTableOptions } from '@/lib/types/options/table.options';
 import { City } from '@/lib/types/domain/city.dto';
 import { ConfectionaryType } from '@/lib/types/domain/confectionary-type.dto';
 import { useConfectionaryTypes } from '@/hooks/dashboard/useConfectionaryTypes';
-import CreateConfectionaryTypeForm from '@/components/forms/create/CreateConfectionaryTypeForm';
+import CreateConfectionaryTypeForm from '@/components/forms/create/dashboard/CreateConfectionaryTypeForm';
 
 const COLUMNS: ColumnDef<ConfectionaryType>[] = [
   {

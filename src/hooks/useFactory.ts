@@ -1,3 +1,4 @@
+import { FiltersDto } from '@/lib/filters/index.dto';
 import { AccountService } from '@/services/account.service';
 import { FactoryService } from '@/services/factory.service';
 import { ProductService } from '@/services/product.service';
@@ -12,9 +13,24 @@ export function useProfileFactories() {
   return { factories: data, isLoading };
 }
 
+export function useFactories(f?: FiltersDto) {
+  const key = ['factories'];
+  if (f) {
+    f.limit && key.push(f.limit.toString());
+    f.page && key.push(f.page.toString());
+  }
+
+  const { data, isLoading } = useQuery({
+    queryKey: key,
+    queryFn: () => FactoryService.list(f),
+  });
+
+  return { data, isLoading, queryKey: key };
+}
+
 export function useFactory(slug: string) {
   const { data, isLoading } = useQuery({
-    queryKey: ['factory', slug],
+    queryKey: ['factories', slug],
     queryFn: () => FactoryService.find(slug),
   });
 
@@ -23,7 +39,7 @@ export function useFactory(slug: string) {
 
 export function useFactoryProducts(slug: string) {
   const { data, isLoading } = useQuery({
-    queryKey: ['factory', slug, 'products'],
+    queryKey: ['factories', slug, 'products'],
     queryFn: () => ProductService.listByFactory(slug),
   });
 

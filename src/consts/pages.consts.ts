@@ -17,4 +17,5 @@ export const DASHBOARD = {
   UNITS: 'units',
   PACKAGES: 'packages',
   CONFECTIONARY_TYPES: 'confectionary-types',
+  FACTORIES: 'factories',
 };

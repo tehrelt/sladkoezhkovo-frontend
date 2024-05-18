@@ -7,7 +7,7 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
-import React from 'react';
+import React, { useState } from 'react';
 import { PAGES } from '@/consts/pages.consts';
 import { DATA_TABLES } from '@/consts/tables';
 import {
@@ -21,7 +21,6 @@ import {
 import { DataTable } from '@/components/data-table';
 import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 
 function DashboardTableView({ table }: { table: string }) {
   const {
@@ -32,8 +31,6 @@ function DashboardTableView({ table }: { table: string }) {
     beforeTableContent,
     createForm,
   } = DATA_TABLES[table];
-
-  const { data, isLoading } = useData();
 
   return (
     <div>
@@ -53,8 +50,7 @@ function DashboardTableView({ table }: { table: string }) {
         </Breadcrumb>
       </div>
       {afterTableContent ? afterTableContent : ''}
-      <div className="">{!isLoading && createForm}</div>
-      {isLoading ? (
+      {/* {isLoading ? (
         <Table>
           <TableHeader>
             <TableRow>
@@ -75,9 +71,12 @@ function DashboardTableView({ table }: { table: string }) {
             ))}
           </TableBody>
         </Table>
+      ) : data ? (
+        <DataTable fetcher={useData} columns={columns} />
       ) : (
-        <DataTable data={data!} columns={columns} />
-      )}
+        <span>Ошибка загрузки</span>
+      )} */}
+      <DataTable fetcher={useData} columns={columns} />
       {beforeTableContent ? beforeTableContent : ''}
     </div>
   );

@@ -5,7 +5,7 @@ import { datef } from '@/lib/utils';
 import { DataTableOptions } from '@/lib/types/options/table.options';
 import { Unit } from '@/lib/types/domain/unit.dto';
 import { useUnits } from '@/hooks/dashboard/useUnits';
-import CreateUnitForm from '@/components/forms/create/CreateUnitForm';
+import CreateUnitForm from '@/components/forms/create/dashboard/CreateUnitForm';
 
 const COLUMNS: ColumnDef<Unit>[] = [
   {

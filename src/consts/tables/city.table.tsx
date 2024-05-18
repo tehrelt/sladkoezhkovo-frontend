@@ -5,7 +5,7 @@ import { datef } from '@/lib/utils';
 import { DataTableOptions } from '@/lib/types/options/table.options';
 import { useCities } from '@/hooks/dashboard/useCities';
 import { City } from '@/lib/types/domain/city.dto';
-import CreateCityForm from '@/components/forms/create/CreateCityForm';
+import CreateCityForm from '@/components/forms/create/dashboard/CreateCityForm';
 
 const COLUMNS: ColumnDef<City>[] = [
   {

@@ -10,10 +10,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import Mention from '@/components/ui/mention';
+import { Price, PriceRange } from '@/components/ui/price-range';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useFactory, useFactoryProducts } from '@/hooks/useFactory';
 import { useProfile } from '@/hooks/useProfile';
-import { MapPinned, Phone, User } from 'lucide-react';
+import { Flag, MapPinned, Phone, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -99,6 +100,10 @@ const FactoryOverviewPage = ({ handle }: Props) => {
                           +{factory?.phoneNumber}
                         </Link>{' '}
                       </li>
+                      <li className="flex gap-x-4 items-center">
+                        <Flag />
+                        <span>{factory?.year} год</span>
+                      </li>
                     </ul>
                   )}
                 </p>
@@ -146,8 +151,24 @@ const FactoryOverviewPage = ({ handle }: Props) => {
                               {p.name}
                             </Link>
                           </CardTitle>
-                          <CardDescription className="text-sm">
-                            {p.confectionaryType.name}
+                          <CardDescription className="text-sm space-y-2">
+                            <p>{p.confectionaryType.name}</p>
+                            <div>
+                              {p.catalogueEntries &&
+                              p.catalogueEntries.length !== 0 ? (
+                                p.catalogueEntries.length == 1 ? (
+                                  <Price value={p.catalogueEntries[0].price} />
+                                ) : (
+                                  <PriceRange
+                                    prices={p.catalogueEntries.map(
+                                      (c) => c.price,
+                                    )}
+                                  />
+                                )
+                              ) : (
+                                <span>Цена не указана</span>
+                              )}
+                            </div>
                           </CardDescription>
                         </div>
                       </CardHeader>

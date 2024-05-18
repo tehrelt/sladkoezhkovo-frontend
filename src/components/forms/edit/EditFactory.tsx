@@ -41,7 +41,11 @@ export const EditFactoryForm = ({ factory }: Props) => {
   );
   const editForm = z.object({
     name: z.string().min(1),
-    phone: z.string().min(11).regex(phoneRegex),
+    phone: z
+      .string()
+      .min(11, { message: 'не меньше 11 цифр' })
+      .max(11, { message: 'не больше 11 цифр' })
+      .regex(phoneRegex),
     file: z
       .instanceof(File)
       .optional()
@@ -69,12 +73,12 @@ export const EditFactoryForm = ({ factory }: Props) => {
       FactoryService.update({
         ...data,
         id: factory.id,
-        phone: data.phone.toString(),
+        phoneNumber: data.phone.toString(),
       }),
     onSuccess: () => {
       toast.success(`Фабрика ${factory.handle} успешно обновленa`);
       queryClient.invalidateQueries({
-        queryKey: ['factory', factory.handle],
+        queryKey: ['factories', factory.handle],
       });
       setIsOpen(false);
     },

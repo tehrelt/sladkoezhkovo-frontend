@@ -1,6 +1,6 @@
 export interface EditFactoryDto {
   id: string;
   name: string;
-  phone: string;
+  phoneNumber: string;
   file?: File;
 }

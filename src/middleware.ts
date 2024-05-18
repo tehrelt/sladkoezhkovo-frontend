@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
-import { ROLES } from './consts/roles.consts';
 import { PAGES } from './consts/pages.consts';
 
 export async function middleware(request: NextRequest) {
@@ -33,7 +32,7 @@ export async function middleware(request: NextRequest) {
 
       const data = await res.json();
 
-      if (![ROLES.ADMIN, ROLES.MODERATOR].includes(data.role)) {
+      if (!['ADMIN', 'MODERATOR'].includes(data.role)) {
         console.log('forbidden');
         return NextResponse.redirect(new URL('/', url));
       }

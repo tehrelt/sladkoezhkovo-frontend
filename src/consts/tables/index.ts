@@ -7,6 +7,8 @@ import { PROPERTY_TYPE_TABLE } from './property-type.table';
 import { CONFECTIONARY_TYPE_TABLE } from './confectionary-type.table';
 import { UNIT_TABLE } from './unit.table';
 import { PACKAGE_TABLE } from './package.table';
+import { FACTORY_TABLE } from './factory.table';
+import { PRODUCT_TABLE } from './product.table';
 
 export const DATA_TABLES: Record<string, DataTableOptions> = {
   applications: APPLICATION_TABLE,
@@ -17,6 +19,8 @@ export const DATA_TABLES: Record<string, DataTableOptions> = {
   units: UNIT_TABLE,
   packages: PACKAGE_TABLE,
   'confectionary-types': CONFECTIONARY_TYPE_TABLE,
+  factories: FACTORY_TABLE,
+  products: PRODUCT_TABLE,
 };
 
 export const tableExists = (tableName: string) =>

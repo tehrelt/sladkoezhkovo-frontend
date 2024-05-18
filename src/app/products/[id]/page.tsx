@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import ProductOverviewPage from './ProductOverviewPage';
 
 interface Props {
   params: {
@@ -7,7 +8,7 @@ interface Props {
 }
 
 const ProductPage: NextPage<Props> = ({ params: { id } }) => {
-  return <div>{id}</div>;
+  return <ProductOverviewPage id={id} />;
 };
 
 export default ProductPage;

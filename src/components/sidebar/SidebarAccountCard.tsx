@@ -60,14 +60,6 @@ export default function SidebarAccountCard({ className }: Props) {
 
   const form = useForm();
 
-  const { mutate } = useMutation({
-    mutationKey: ['update-avatar'],
-    mutationFn: AccountService.updateAvatar,
-    onSuccess: () => {
-      toast('Фото обновлено');
-    },
-  });
-
   if (isLoading) {
     return (
       <div className={cn(className)}>
@@ -90,12 +82,6 @@ export default function SidebarAccountCard({ className }: Props) {
   if (loggedOut) {
     push('/');
   }
-
-  const onSubmit = async (data) => {
-    const formData = new FormData();
-    formData.append('file', data.file[0]);
-    await mutate(formData);
-  };
 
   return (
     user && (

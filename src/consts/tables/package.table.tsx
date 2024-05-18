@@ -5,7 +5,7 @@ import { datef } from '@/lib/utils';
 import { DataTableOptions } from '@/lib/types/options/table.options';
 import { Package } from '@/lib/types/domain/package.dto';
 import { usePackages } from '@/hooks/dashboard/usePackages';
-import CreatePackageForm from '@/components/forms/create/CreatePackageForm';
+import CreatePackageForm from '@/components/forms/create/dashboard/CreatePackageForm';
 
 const COLUMNS: ColumnDef<Package>[] = [
   {

@@ -2,6 +2,7 @@
 import {
   ColumnDef,
   ColumnFiltersState,
+  PaginationState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -17,58 +18,109 @@ import {
   Table,
 } from '../ui/table';
 import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ListDto } from '@/lib/types/list.dto';
+import { useQueryClient } from '@tanstack/react-query';
+import { FiltersDto } from '@/lib/filters/index.dto';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
+import { Skeleton } from '../ui/skeleton';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: ListDto<TData>;
+  fetcher: (filters: FiltersDto) => {
+    data: ListDto<TData>;
+    isLoading: boolean;
+    queryKey: string[];
+  };
 }
 
 export function DataTable<TData, TValue>({
   columns,
-  data,
+  fetcher,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
+  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  const { data, isLoading, queryKey } = fetcher({
+    page: pageIndex,
+    limit: pageSize,
+  });
+  const queryClient = useQueryClient();
+
+  const pagination = useMemo(
+    () => ({
+      pageIndex,
+      pageSize,
+    }),
+    [pageIndex, pageSize],
+  );
+
   const table = useReactTable({
-    data: data.items,
+    data: data ? data.items : [],
     columns,
+    pageCount: data ? Math.ceil(data.count / pageSize) : 0,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onPaginationChange: setPagination,
+    manualPagination: true,
     state: {
       columnFilters,
+      pagination,
     },
   });
 
-  if (!data.items) {
-    return <>Error</>;
-  }
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageIndex, pageSize]);
 
   return (
     <div>
-      <div className="flex justify-between">
-        <div className="flex items-center py-4">
-          {/* <Input
-            placeholder="Filter handle..."
-            value={
-              (table.getColumn('handle')?.getFilterValue() as string) ?? ''
+      <div className="flex justify-between items-center">
+        <div className="">
+          <Select
+            value={pageSize.toString()}
+            onValueChange={(value) =>
+              setPagination(() => ({
+                pageIndex: 0,
+                pageSize: parseInt(value),
+              }))
             }
-            onChange={(event) =>
-              table.getColumn('handle')?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          /> */}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Записей на страницу" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Количество записей</SelectLabel>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="25">25</SelectItem>
+                <SelectItem value="50">50</SelectItem>
+                <SelectItem value="100">100</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
         <div className="flex items-center justify-end space-x-2 py-4">
           <div>
             <p className="text-muted-foreground text-end">
-              Всего записей: {data.count}
+              Всего записей: {data?.count}
             </p>
-            <div className="flex space-x-2 py-4">
+            <div className="flex space-x-2 py-4 items-center">
               <Button
                 variant="outline"
                 size="sm"
@@ -77,6 +129,7 @@ export function DataTable<TData, TValue>({
               >
                 Предыдущая
               </Button>
+              <span>{pageIndex + 1}</span>
               <Button
                 variant="outline"
                 size="sm"
@@ -110,7 +163,17 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              [1, 2, 3].map((i) => (
+                <TableRow key={i}>
+                  {columns.map((c) => (
+                    <TableCell key={c.id}>
+                      <Skeleton className="h-8 w-1/2" />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}

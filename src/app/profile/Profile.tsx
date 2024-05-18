@@ -13,6 +13,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useProfileFactories } from '@/hooks/useFactory';
 import Link from 'next/link';
+import { Plus } from 'lucide-react';
+import { PAGES } from '@/consts/pages.consts';
 
 type Props = {};
 
@@ -64,25 +66,34 @@ const Profile = (props: Props) => {
           {factoriesLoading ? (
             <>Loading...</>
           ) : (
-            factories?.items.map((factory) => (
-              // eslint-disable-next-line react/jsx-key
-              <Link
-                href={`/factory/${factory.handle}`}
-                className="hover:underline"
-              >
-                <Card className="h-full ">
-                  <CardHeader className="flex flex-col items-center justify-between h-full space-y-2">
-                    <Avatar className="w-16 h-16">
-                      <AvatarImage src={factory.image} />
-                      <AvatarFallback />
-                    </Avatar>
-                    <div className="w-full">
-                      <CardTitle className="text-lg">{factory.name}</CardTitle>
-                    </div>
-                  </CardHeader>
+            <>
+              {factories?.items.map((factory) => (
+                // eslint-disable-next-line react/jsx-key
+                <Link
+                  href={`/factory/${factory.handle}`}
+                  className="hover:underline"
+                >
+                  <Card className="h-full ">
+                    <CardHeader className="flex flex-col items-center justify-between h-full space-y-2">
+                      <Avatar className="w-16 h-16">
+                        <AvatarImage src={factory.image} />
+                        <AvatarFallback />
+                      </Avatar>
+                      <div className="w-full">
+                        <CardTitle className="text-lg">
+                          {factory.name}
+                        </CardTitle>
+                      </div>
+                    </CardHeader>
+                  </Card>
+                </Link>
+              ))}
+              <Link href={PAGES.ADD_FACTORY}>
+                <Card className="border-dashed flex justify-center items-center w-full h-full hover:bg-slate-50 transition-all">
+                  <Plus />
                 </Card>
               </Link>
-            ))
+            </>
           )}
         </div>
       </div>

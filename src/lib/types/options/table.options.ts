@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { ListDto } from '../list.dto';
+import { FiltersDto } from '../../filters/index.dto';
 
 export interface DataTableOptions<T = any, U = any> {
   title: string;
@@ -7,6 +8,10 @@ export interface DataTableOptions<T = any, U = any> {
   beforeTableContent?: ReactNode;
   afterTableContent?: ReactNode;
 
-  useData: () => { data: ListDto<T>; isLoading: boolean };
+  useData: (pagination: FiltersDto) => {
+    data: ListDto<T>;
+    isLoading: boolean;
+    queryKey: string[];
+  };
   createForm?: ReactNode;
 }
