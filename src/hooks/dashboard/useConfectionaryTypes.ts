@@ -2,7 +2,7 @@ import { FiltersDto } from '@/lib/filters/index.dto';
 import { ConfectionaryTypeService } from '@/services/confectionary-type.service';
 import { useQuery } from '@tanstack/react-query';
 
-export function useUsers(f?: FiltersDto) {
+export function useConfectionaryTypes(f?: FiltersDto) {
   const key = ['confectionary-types'];
   if (f) {
     f.limit && key.push(f.limit.toString());
