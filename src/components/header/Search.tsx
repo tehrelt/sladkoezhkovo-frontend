@@ -12,6 +12,7 @@ import { Popover, PopoverContent } from '../ui/popover';
 import { PopoverTrigger } from '@radix-ui/react-popover';
 import { ScrollArea } from '../ui/scroll-area';
 import { Separator } from '@radix-ui/react-separator';
+import { debounce } from 'lodash';
 
 type Props = {
   className?: string;
@@ -87,13 +88,15 @@ const Search = ({ className }: Props) => {
 
   const queryClient = useQueryClient();
 
-  const handleChange = (value: string) => {
+  const debouncedChange = debounce((value) => {
     setQuery(value);
     setIsOpen(!!value);
     queryClient.invalidateQueries({
       queryKey,
     });
-  };
+  }, 300);
+
+  const handleChange = debouncedChange;
 
   return (
     <Popover modal={false} open={isOpen} onOpenChange={setIsOpen}>

@@ -12,6 +12,7 @@ import {
 import Mention from '@/components/ui/mention';
 import { Price, PriceRange } from '@/components/ui/price-range';
 import { Skeleton } from '@/components/ui/skeleton';
+import OwnerRequired from '@/components/utils/OwnerRequired';
 import { useFactory, useFactoryProducts } from '@/hooks/useFactory';
 import { useProfile } from '@/hooks/useProfile';
 import { Flag, MapPinned, Phone, User } from 'lucide-react';
@@ -27,8 +28,6 @@ const FactoryOverviewPage = ({ handle }: Props) => {
   const { user, isLoading: profileLoading } = useProfile();
   const { factory, isLoading: factoryLoading } = useFactory(handle);
   const { products, isLoading: productsLoading } = useFactoryProducts(handle);
-
-  const isOwner = user?.handle === factory?.owner?.handle;
 
   return (
     <div>
@@ -56,14 +55,14 @@ const FactoryOverviewPage = ({ handle }: Props) => {
               </div>
             </div>
             <div className="flex gap-x-4">
-              {!profileLoading && isOwner && (
-                <>
+              {!factoryLoading && factory && (
+                <OwnerRequired ownerHandle={factory.owner.handle}>
                   <Button>Статистика</Button>
                   <EditFactoryForm factory={factory!} />
                   <Link href={`/factory/${factory?.handle}/create`}>
                     <Button>Зарегистрировать продукт</Button>
                   </Link>
-                </>
+                </OwnerRequired>
               )}
             </div>
           </CardHeader>
