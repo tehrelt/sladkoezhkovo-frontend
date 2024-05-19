@@ -5,6 +5,7 @@ export function useProfile() {
   const { data, isLoading } = useQuery({
     queryKey: ['user'],
     queryFn: AccountService.profile,
+    retry: false,
   });
 
   const loggedOut = !data;

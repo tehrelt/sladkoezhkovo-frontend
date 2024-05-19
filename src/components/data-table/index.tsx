@@ -146,7 +146,7 @@ export function DataTable<TData, TValue>({
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="">
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -165,7 +165,7 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {isLoading ? (
               [1, 2, 3].map((i) => (
-                <TableRow key={i}>
+                <TableRow key={i} className="h-20">
                   {columns.map((c) => (
                     <TableCell key={c.id}>
                       <Skeleton className="h-8 w-1/2" />
@@ -176,8 +176,9 @@ export function DataTable<TData, TValue>({
             ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  key={row.id}
+                  key={row.getVisibleCells()[0].getValue('id')}
                   data-state={row.getIsSelected() && 'selected'}
+                  className="h-20"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

@@ -6,6 +6,7 @@ export const PAGES = {
   PROFILE: '/profile',
   ADD_SHOP: '/profile/add-shop',
   ADD_FACTORY: '/profile/add-factory',
+  FACTORY: '/factory',
 };
 
 export const DASHBOARD = {

@@ -13,6 +13,7 @@ import SidebarAccountCard from './SidebarAccountCard';
 import SidebarMenuList from './SidebarMenuList';
 import { Accordion } from '../ui/accordion';
 import { PAGES } from '@/consts/pages.consts';
+import { ScrollArea } from '../ui/scroll-area';
 
 export default function DashboardSidebar() {
   return (

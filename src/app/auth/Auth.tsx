@@ -45,6 +45,7 @@ export default function Auth() {
   });
 
   const onSubmit: SubmitHandler<SignInDto> = async (data) => {
+    console.log(data);
     await mutate(data);
   };
 

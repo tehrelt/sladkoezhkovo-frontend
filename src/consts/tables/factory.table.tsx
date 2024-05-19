@@ -70,8 +70,6 @@ const COLUMNS: ColumnDef<Factory>[] = [
         <Avatar>
           <AvatarImage src={(link as string) || undefined} />
           <AvatarFallback></AvatarFallback>
-          {/* @ts-ignore */}
-          {cell.row.getValue('handle').charAt(0)}
         </Avatar>
       );
     },

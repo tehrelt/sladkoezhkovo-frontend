@@ -2,16 +2,23 @@ import { AccessTokenService } from '@/services/access-token';
 import { AuthService } from '@/services/auth.service';
 import axios from 'axios';
 
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 const api = axios.create({
-  baseURL: 'http://localhost:4200/api',
+  baseURL,
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
-  const token = AccessTokenService.get();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  try {
+    console.log(config.headers);
+    const token = AccessTokenService.get();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  } catch (e) {
+    console.log('interceptor', e);
   }
   return config;
 });
@@ -27,7 +34,6 @@ api.interceptors.response.use(
         const res = await AuthService.refresh();
         return api.request(originalRequest);
       } catch (e) {
-        console.log(e);
         AccessTokenService.remove();
       }
     }

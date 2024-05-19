@@ -44,7 +44,11 @@ import { useCities } from '@/hooks/dashboard/useCities';
 import { usePropertyTypes } from '@/hooks/dashboard/usePropertyTypes';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { AlertCircle, ArrowLeft } from 'lucide-react';
+import { PAGES } from '@/consts/pages.consts';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AxiosError } from 'axios';
+import { ErrorDto } from '@/lib/types/error.dto';
 
 type Props = {};
 
@@ -72,15 +76,16 @@ const CreateFactoryForm = (props: Props) => {
   const { data: cities, isLoading: citiesLoading } = useCities();
   const { data: ptpt, isLoading: ptptLoading } = usePropertyTypes();
 
-  const { mutate } = useMutation({
+  const { mutate, isError, error, isPending } = useMutation({
     mutationKey: ['factories', 'create'],
     mutationFn: (data: z.infer<typeof zForm>) =>
       AccountService.createFactory(data),
     onSuccess: (dto) => {
       toast.success('Фабрика успешно создана');
+      router.push(`${PAGES.FACTORY}/${dto.handle}`);
     },
-    onError: (error) => {
-      toast.error(error);
+    onError: (error: ErrorDto) => {
+      toast.error(error.message);
     },
   });
 
@@ -96,8 +101,15 @@ const CreateFactoryForm = (props: Props) => {
           Вернуться назад
         </Button>
       </div>
-      <div className="flex justify-center">
-        <Card>
+      <div className="flex flex-col items-center">
+        <Card className="py-4 px-4">
+          {isError && (
+            <Alert variant={'destructive'}>
+              <AlertCircle />
+              <AlertTitle>Ошибка создания</AlertTitle>
+              <AlertDescription>{error.message}</AlertDescription>
+            </Alert>
+          )}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <CardHeader>
@@ -303,7 +315,9 @@ const CreateFactoryForm = (props: Props) => {
                 </div>
               </CardContent>
               <CardFooter className="flex justify-end">
-                <Button type="submit">Добавить</Button>
+                <Button disabled={isPending} type="submit">
+                  Добавить
+                </Button>
               </CardFooter>
             </form>
           </Form>

@@ -121,9 +121,8 @@ const ProductOverviewPage = ({ id }: Props) => {
                   }}
                 >
                   <span className="text-lg">
-                    {entry.quantity}x{entry.price}
-                  </span>{' '}
-                  рублей
+                    {entry.quantity} {entry.package.name} {entry.unit.name}
+                  </span>
                 </Button>
               ))}
             </div>
@@ -142,9 +141,15 @@ const ProductOverviewPage = ({ id }: Props) => {
             </div>
           </CardContent>
           <CardFooter>
-            <Button disabled={!selectedEntry || isOwner}>
+            <Button
+              disabled={
+                !selectedEntry || isOwner || user?.role !== 'SHOP_OWNER'
+              }
+            >
               {isOwner ? (
                 <span>Вы владелец</span>
+              ) : user?.role !== 'SHOP_OWNER' ? (
+                <span>Заказывать могут только владельцы магазинов</span>
               ) : !selectedEntry ? (
                 <span>Выберите вариацию</span>
               ) : (

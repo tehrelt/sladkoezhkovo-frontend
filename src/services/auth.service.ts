@@ -1,10 +1,10 @@
 import { api } from '@/api/axios.config';
 import { AccessTokenService } from './access-token';
 import { AuthResponseDto, ProfileDto, SignInDto } from '@/lib/dto/auth.dto';
-import { User } from '@/lib/types/domain/user';
 
 export class AuthService {
   static async signIn({ login, password }: SignInDto) {
+    console.log(login, password);
     const response = await api.post<AuthResponseDto>('/auth/sign-in', {
       login,
       password,

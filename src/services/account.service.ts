@@ -4,6 +4,7 @@ import { ProfileDto } from '@/lib/dto/auth.dto';
 import { CreateFactoryDto } from '@/lib/dto/create-factory.dto';
 import { Factory } from '@/lib/types/domain/factory.dto';
 import { ListDto } from '@/lib/types/list.dto';
+import { AxiosError } from 'axios';
 
 export class AccountService {
   static async getFactories(): Promise<ListDto<Factory>> {
@@ -24,15 +25,16 @@ export class AccountService {
 
     console.log(data);
 
-    const response = await api.post<Factory>('/account/add-factory', data, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
-    if (response.status != 201) {
-      throw new Error(
-        `${response.status} ${response.statusText} JSON: ${JSON.stringify(response.data)}`,
-      );
+    try {
+      const response = await api.post<Factory>('/account/add-factory', data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw error.response?.data;
+      }
     }
-    return response.data;
   }
 
   static async profile(): Promise<ProfileDto> {
