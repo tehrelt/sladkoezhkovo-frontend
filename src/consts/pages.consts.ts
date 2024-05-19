@@ -4,10 +4,11 @@ export const PAGES = {
   AUTH: '/auth',
 
   PROFILE: '/profile',
-  ADD_SHOP: '/profile/add-shop',
-  ADD_FACTORY: '/profile/add-factory',
+  ADD_SHOP: '/add-shop',
+  ADD_FACTORY: '/add-factory',
   FACTORY: '/factory',
   PRODUCTS: '/products',
+  USERS: '/users',
 };
 
 export const DASHBOARD = {

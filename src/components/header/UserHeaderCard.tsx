@@ -59,7 +59,7 @@ export default function UserHeaderCard() {
               <Skeleton className="w-[128px] h-[128px] rounded-full" />
             ) : (
               <Link
-                href={PAGES.PROFILE}
+                href={`${PAGES.USERS}/${user.handle}`}
                 className="w-[48px] h-[48px] flex items-center justify-center"
               >
                 <Avatar className="w-[42px] h-[42px] hover:shadow-2xl hover:w-[44px] hover:h-[44px] transition-all duration-100">
@@ -84,7 +84,7 @@ export default function UserHeaderCard() {
               </RoleRequired>
               <RoleRequired roles={['FACTORY_OWNER', 'SHOP_OWNER']}>
                 <DropdownMenuItem>
-                  <Link href={PAGES.PROFILE}>Профиль</Link>
+                  <Link href={`${PAGES.USERS}/${user.handle}`}>Профиль</Link>
                 </DropdownMenuItem>
               </RoleRequired>
               <RoleRequired roles={['SHOP_OWNER']}>

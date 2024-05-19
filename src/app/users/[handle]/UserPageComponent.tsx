@@ -15,12 +15,18 @@ import { useProfileFactories } from '@/hooks/useFactory';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { PAGES } from '@/consts/pages.consts';
+import { useUser } from '@/hooks/dashboard/useUsers';
+import { useUserOwnerships } from '@/hooks/useUserFactories';
+import OwnerRequired from '@/components/utils/OwnerRequired';
 
-type Props = {};
+type Props = {
+  handle: string;
+};
 
-const Profile = (props: Props) => {
-  const { user, isLoading } = useProfile();
-  const { factories, isLoading: factoriesLoading } = useProfileFactories();
+const UserPageComponent = ({ handle }: Props) => {
+  const { data: user, isLoading } = useUser(handle);
+  const { data: ownerships, isLoading: ownershipLoading } =
+    useUserOwnerships(handle);
 
   return (
     <div className="flex gap-x-2">
@@ -31,7 +37,7 @@ const Profile = (props: Props) => {
               <Skeleton className="w-[128px] h-[128px] rounded-full" />
             ) : (
               <Avatar className="w-[128px] h-[128px]">
-                <AvatarImage src={user.imageLink || undefined} />
+                <AvatarImage src={user?.imageLink || undefined} />
                 <AvatarFallback>{user?.lastName.charAt(0)}</AvatarFallback>
               </Avatar>
             )}
@@ -63,36 +69,35 @@ const Profile = (props: Props) => {
       <div className="flex-1">
         <p className="text-2xl font-bold">Владения</p>
         <div className="grid grid-cols-3 gap-x-4 gap-y-4">
-          {factoriesLoading ? (
+          {ownershipLoading ? (
             <>Loading...</>
           ) : (
             <>
-              {factories?.items.map((factory) => (
+              {ownerships?.items.map((o) => (
                 // eslint-disable-next-line react/jsx-key
-                <Link
-                  href={`/factory/${factory.handle}`}
-                  className="hover:underline"
-                >
+                <Link href={`/factory/${o.handle}`} className="hover:underline">
                   <Card className="h-full ">
                     <CardHeader className="flex flex-col items-center justify-between h-full space-y-2">
                       <Avatar className="w-16 h-16">
-                        <AvatarImage src={factory.image} />
+                        <AvatarImage src={o.image} />
                         <AvatarFallback />
                       </Avatar>
                       <div className="w-full">
-                        <CardTitle className="text-lg">
-                          {factory.name}
-                        </CardTitle>
+                        <CardTitle className="text-lg">{o.name}</CardTitle>
                       </div>
                     </CardHeader>
                   </Card>
                 </Link>
               ))}
-              <Link href={PAGES.ADD_FACTORY}>
-                <Card className="border-dashed flex justify-center items-center w-full h-full hover:bg-slate-50 transition-all">
-                  <Plus />
-                </Card>
-              </Link>
+              {!isLoading && (
+                <OwnerRequired ownerHandle={user!.handle}>
+                  <Link href={PAGES.ADD_FACTORY}>
+                    <Card className="border-dashed flex justify-center items-center w-full h-full hover:bg-slate-50 transition-all">
+                      <Plus />
+                    </Card>
+                  </Link>
+                </OwnerRequired>
+              )}
             </>
           )}
         </div>
@@ -101,4 +106,4 @@ const Profile = (props: Props) => {
   );
 };
 
-export default Profile;
+export default UserPageComponent;

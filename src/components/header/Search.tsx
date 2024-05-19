@@ -139,7 +139,7 @@ const Search = ({ className }: Props) => {
                       data &&
                       data.factories.map((i) => ({
                         link: `${PAGES.FACTORY}/${i.handle}`,
-                        name: i.name,
+                        name: `${i.name} (@${i.handle})`,
                         image: i.image,
                       }))
                     }
@@ -152,7 +152,7 @@ const Search = ({ className }: Props) => {
                   <ResultList
                     isLoading={isLoading}
                     results={data.users.map((i) => ({
-                      link: `${i.handle}`,
+                      link: `${PAGES.USERS}/${i.handle}`,
                       name: `${fio(i)} (@${i.handle})`,
                       image: i.image,
                     }))}
