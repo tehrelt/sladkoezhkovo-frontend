@@ -12,6 +12,7 @@ import { navigationMenuTriggerStyle } from '../ui/navigation-menu';
 import UserHeaderCard from './UserHeaderCard';
 import { cn } from '@/lib/utils';
 import { useProfile } from '@/hooks/useProfile';
+import Search from './Search';
 
 type Props = {
   className?: string;
@@ -61,7 +62,8 @@ function Header({ className }: Props) {
           </NavigationMenuList>
         </NavigationMenu>
       </div>
-      <div className="flex-none">
+      <div className="flex items-center gap-x-4 flex-none">
+        <Search className="" />
         <UserHeaderCard />
       </div>
     </header>

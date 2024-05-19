@@ -81,6 +81,7 @@ const CreateFactoryForm = (props: Props) => {
     mutationFn: (data: z.infer<typeof zForm>) =>
       AccountService.createFactory(data),
     onSuccess: (dto) => {
+      console.log(dto);
       toast.success('Фабрика успешно создана');
       router.push(`${PAGES.FACTORY}/${dto.handle}`);
     },
