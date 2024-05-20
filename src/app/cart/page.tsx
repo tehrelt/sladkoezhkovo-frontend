@@ -1,9 +1,10 @@
 import { NextPage } from 'next';
+import CartPage from './CartPage';
 
 interface Props {}
 
-const CartPage: NextPage<Props> = ({}) => {
-  return <div></div>;
+const Cart: NextPage<Props> = ({}) => {
+  return <CartPage />;
 };
 
-export default CartPage;
+export default Cart;

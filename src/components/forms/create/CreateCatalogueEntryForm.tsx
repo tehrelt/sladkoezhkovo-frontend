@@ -45,6 +45,10 @@ const schema = z.object({
     z.number().min(1),
   ),
   packageId: z.string().uuid(),
+  unitUsage: z.preprocess(
+    (e) => parseInt(z.string().parse(e)),
+    z.number().min(1),
+  ),
 });
 
 const CreateCatalogueEntryForm = ({ product, callback }: Props) => {
@@ -65,7 +69,7 @@ const CreateCatalogueEntryForm = ({ product, callback }: Props) => {
       queryClient.invalidateQueries({ queryKey: ['products', product.id] });
     },
     onError: (error) => {
-      toast.error(error);
+      toast.error(error.message);
     },
   });
 
@@ -103,29 +107,26 @@ const CreateCatalogueEntryForm = ({ product, callback }: Props) => {
                   {pLoading ? (
                     <p>Загрузка</p>
                   ) : (
-                    <>
-                      {(function () {
-                        const pp = packages?.items.filter(
-                          (p) =>
-                            !product.catalogueEntries
-                              ?.map((ce) => ce.package.id)
-                              .includes(p.id),
-                        );
-
-                        if (pp?.length === 0) {
-                          return <>Нет доступных фасовок</>;
-                        }
-
-                        return pp?.map((p) => (
-                          <SelectItem value={p.id} key={p.id}>
-                            {p.name}
-                          </SelectItem>
-                        ));
-                      })()}
-                    </>
+                    packages?.items.map((p) => (
+                      <SelectItem value={p.id} key={p.id}>
+                        {p.name}
+                      </SelectItem>
+                    ))
                   )}
                 </SelectContent>
               </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="unitUsage"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Количество единиц</FormLabel>
+              <Input {...field} type="number" />
               <FormMessage />
             </FormItem>
           )}
@@ -136,9 +137,7 @@ const CreateCatalogueEntryForm = ({ product, callback }: Props) => {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                Цена {'(если товар весовой, указывать цену за 100г)'}
-              </FormLabel>
+              <FormLabel>Цена</FormLabel>
               <Input {...field} type="number" />
               <FormMessage />
             </FormItem>

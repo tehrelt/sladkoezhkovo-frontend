@@ -2,6 +2,7 @@ export const PAGES = {
   ROOT: '/',
   DASHBOARD: '/dashboard',
   AUTH: '/auth',
+  CART: '/cart',
 
   PROFILE: '/profile',
   ADD_SHOP: '/add-shop',

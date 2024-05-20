@@ -28,7 +28,8 @@ import { CatalogueEntry } from '@/lib/types/domain/catalogue-entry.dto';
 import { Price, PriceRange } from '@/components/ui/price-range';
 import OwnerRequired from '@/components/utils/OwnerRequired';
 import { Input } from '@/components/ui/input';
-import { useCartStore } from '@/store/cart';
+import { PAGES } from '@/consts/pages.consts';
+import { useAddToCart, useCart } from '@/hooks/useCart';
 
 type Props = {
   id: string;
@@ -37,12 +38,6 @@ type Props = {
 const ProductOverviewPage = ({ id }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const {
-    items: cartItems,
-    add: addCartItem,
-    find: findCartItem,
-  } = useCartStore();
-
   const { product, isLoading } = useProduct(id);
   const { productOwner, isLoading: productOwnerLoading } = useProductOwner(id);
   const { user, isLoading: userLoading } = useProfile();
@@ -50,17 +45,18 @@ const ProductOverviewPage = ({ id }: Props) => {
   const [selectedEntry, setSelectedEntry] = useState<CatalogueEntry>();
   const [unit, setUnit] = useState<number>();
 
-  const handleAddCartItem = (catalogueId: string) => {
-    if (unit) {
-      addCartItem(
-        {
-          id: catalogueId,
-          name: `${product?.name}, ${selectedEntry?.package.name}`,
-          price: selectedEntry?.price ?? 0,
-          productId: id,
-        },
-        unit,
-      );
+  const { checkProduct } = useCart();
+  const { mutate, isPending } = useAddToCart({});
+
+  const canAdd =
+    !isLoading && selectedEntry && !checkProduct(selectedEntry!.id);
+
+  const handleAddCartItem = (catalogueId: string, quantity: number) => {
+    if (user && unit) {
+      mutate({
+        catalogueId,
+        quantity,
+      });
     }
   };
 
@@ -118,7 +114,7 @@ const ProductOverviewPage = ({ id }: Props) => {
                     variant={'link'}
                     className="p-0 text-muted-foreground m-0"
                     onClick={() =>
-                      router.push(`/factory/${product?.factory.handle}`)
+                      router.push(`${PAGES.FACTORY}/${product?.factory.handle}`)
                     }
                   >
                     {product?.factory.name}
@@ -135,6 +131,7 @@ const ProductOverviewPage = ({ id }: Props) => {
                   variant={'outline'}
                   className={cn(
                     selectedEntry?.id === entry.id && 'border-blue-500',
+                    'text-lg',
                   )}
                   onClick={(e) => {
                     selectedEntry
@@ -144,7 +141,8 @@ const ProductOverviewPage = ({ id }: Props) => {
                       : setSelectedEntry(entry);
                   }}
                 >
-                  <span className="text-lg">{entry.package.name}</span>
+                  {entry.unitUsage}/{entry.package.unit.name}/
+                  {entry.package.name}
                 </Button>
               ))}
             </div>
@@ -184,9 +182,9 @@ const ProductOverviewPage = ({ id }: Props) => {
                 isOwner ||
                 user?.role !== 'SHOP_OWNER' ||
                 unit == 0 ||
-                !!findCartItem(selectedEntry.id)
+                !canAdd
               }
-              onClick={() => handleAddCartItem(selectedEntry?.id!)}
+              onClick={() => handleAddCartItem(selectedEntry?.id!, unit!)}
             >
               {isOwner ? (
                 <span>Вы владелец</span>
@@ -194,7 +192,7 @@ const ProductOverviewPage = ({ id }: Props) => {
                 <span>Заказывать могут только владельцы магазинов</span>
               ) : !selectedEntry ? (
                 <span>Выберите вариацию</span>
-              ) : findCartItem(selectedEntry.id) ? (
+              ) : !canAdd ? (
                 <span>Уже добавлено</span>
               ) : (
                 <span>Добавить в корзину</span>
