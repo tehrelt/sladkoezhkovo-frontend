@@ -21,14 +21,14 @@ const Cart = (props: Props) => {
       <Popover modal={false}>
         <PopoverTrigger>
           <Button className="flex gap-x-2">
-            {!isLoading && cart ? (
-              <>
-                <ShoppingCart />
-                {cart.count}
-              </>
-            ) : (
-              <Skeleton />
-            )}
+            <>
+              <ShoppingCart />
+              {!isLoading && cart ? (
+                cart.count
+              ) : (
+                <Skeleton className="w-2 h-2" />
+              )}
+            </>
           </Button>
         </PopoverTrigger>
 

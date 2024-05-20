@@ -30,6 +30,7 @@ import OwnerRequired from '@/components/utils/OwnerRequired';
 import { Input } from '@/components/ui/input';
 import { PAGES } from '@/consts/pages.consts';
 import { useAddToCart, useCart } from '@/hooks/useCart';
+import AuthRequired from '@/components/utils/RoleRequired';
 
 type Props = {
   id: string;
@@ -159,45 +160,46 @@ const ProductOverviewPage = ({ id }: Props) => {
                 <Price value={selectedEntry.price} />
               )}
             </div>
-
-            <div className="flex items-center gap-x-2">
-              <p>Количество: </p>
-              <div className="">
-                <Input
-                  min={1}
-                  value={unit}
-                  onChange={(e) => {
-                    console.log(e.target.value, Number.isNaN(e.target.value));
-                    const num = Number(e.target.value);
-                    setUnit((o) => (!Number.isNaN(num) ? num : o));
-                  }}
-                />
-              </div>
-            </div>
           </CardContent>
-          <CardFooter>
-            <Button
-              disabled={
-                !selectedEntry ||
-                isOwner ||
-                user?.role !== 'SHOP_OWNER' ||
-                unit == 0 ||
-                !canAdd
-              }
-              onClick={() => handleAddCartItem(selectedEntry?.id!, unit!)}
-            >
-              {isOwner ? (
-                <span>Вы владелец</span>
-              ) : user?.role !== 'SHOP_OWNER' ? (
-                <span>Заказывать могут только владельцы магазинов</span>
-              ) : !selectedEntry ? (
-                <span>Выберите вариацию</span>
-              ) : !canAdd ? (
-                <span>Уже добавлено</span>
-              ) : (
-                <span>Добавить в корзину</span>
-              )}
-            </Button>
+          <CardFooter className="flex justify-between">
+            <AuthRequired roles={['SHOP_OWNER']}>
+              <div className="flex items-center gap-x-2">
+                <p>Количество: </p>
+                <div className="">
+                  <Input
+                    min={1}
+                    value={unit}
+                    onChange={(e) => {
+                      console.log(e.target.value, Number.isNaN(e.target.value));
+                      const num = Number(e.target.value);
+                      setUnit((o) => (!Number.isNaN(num) ? num : o));
+                    }}
+                  />
+                </div>
+              </div>
+              <Button
+                disabled={
+                  !selectedEntry ||
+                  isOwner ||
+                  user?.role !== 'SHOP_OWNER' ||
+                  unit == 0 ||
+                  !canAdd
+                }
+                onClick={() => handleAddCartItem(selectedEntry?.id!, unit!)}
+              >
+                {isOwner ? (
+                  <span>Вы владелец</span>
+                ) : user?.role !== 'SHOP_OWNER' ? (
+                  <span>Заказывать могут только владельцы магазинов</span>
+                ) : !selectedEntry ? (
+                  <span>Выберите вариацию</span>
+                ) : !canAdd ? (
+                  <span>Уже добавлено</span>
+                ) : (
+                  <span>Добавить в корзину</span>
+                )}
+              </Button>
+            </AuthRequired>
           </CardFooter>
         </Card>
         {!productOwnerLoading && !userLoading && productOwner && (

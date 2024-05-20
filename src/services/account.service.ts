@@ -6,6 +6,7 @@ import { CartEntry } from '@/lib/dto/cart-entry.dto';
 import { CreateFactoryDto } from '@/lib/dto/create-factory.dto';
 import { CreateShopDto } from '@/lib/dto/create/shop.dto';
 import { RemoveFromCartDto } from '@/lib/dto/remove-from-cart';
+import { UpdateCartEntryDto } from '@/lib/dto/update-cart-entry.dto';
 import { Factory } from '@/lib/types/domain/factory.dto';
 import { Shop } from '@/lib/types/domain/shop.dto';
 import { ListDto } from '@/lib/types/list.dto';
@@ -84,6 +85,11 @@ export class AccountService {
 
   static async addToCart(dto: AddToCartDto): Promise<unknown> {
     const response = await api.post('/account/cart', dto);
+    return response.data;
+  }
+
+  static async updateCartEntry(dto: UpdateCartEntryDto): Promise<unknown> {
+    const response = await api.patch('/account/cart', dto);
     return response.data;
   }
 

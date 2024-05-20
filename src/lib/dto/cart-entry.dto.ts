@@ -19,12 +19,17 @@ export interface CatalogueEntry {
   product: Product;
 }
 
-export interface Package {
+interface Package {
   id: string;
   createdAt: string;
   updatedAt: any;
   name: string;
   unitId: string;
+  unit: Unit;
+}
+
+interface Unit {
+  name: string;
 }
 
 export interface Product {

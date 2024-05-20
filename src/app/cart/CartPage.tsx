@@ -6,18 +6,41 @@ import { PAGES } from '@/consts/pages.consts';
 import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
-import { useCart, useRemoveFromCart } from '@/hooks/useCart';
+import {
+  useCart,
+  useRemoveFromCart,
+  useUpdateCartEntry,
+} from '@/hooks/useCart';
 import { CartEntry } from '@/lib/dto/cart-entry.dto';
 import { Input } from '@/components/ui/input';
 import { Trash, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { debounce } from 'lodash';
+import { UpdateCartEntryDto } from '@/lib/dto/update-cart-entry.dto';
+import { toast } from 'sonner';
 
 type Props = {};
 
 const CartItem = ({ item }: { item?: CartEntry }) => {
   const [quantity, setQuantity] = React.useState(item?.quantity);
 
-  const { mutate, isPending } = useRemoveFromCart({});
+  const { mutate: removeFromCart, isPending: removePending } =
+    useRemoveFromCart({});
+  const { mutate: updateCartEntry, isPending: updatePending } =
+    useUpdateCartEntry({
+      onSuccess: () => {
+        // toast.success('Цена обновлена');
+      },
+    });
+
+  const debouncedUpdate = debounce(
+    ({ catalogueId, quantity }: UpdateCartEntryDto) => {
+      updateCartEntry({ catalogueId, quantity });
+    },
+    500,
+  );
+
+  const updateQuantity = debouncedUpdate;
 
   return (
     <Card>
@@ -37,7 +60,7 @@ const CartItem = ({ item }: { item?: CartEntry }) => {
           {!item ? (
             <Skeleton className="w-[512px] h-4" />
           ) : (
-            <div className="flex flex-col justify-between">
+            <div className="flex flex-col ">
               <Link
                 href={`${PAGES.PRODUCTS}/${item.catalogueEntry.productId}`}
                 className="hover:underline"
@@ -45,15 +68,18 @@ const CartItem = ({ item }: { item?: CartEntry }) => {
                 {item.catalogueEntry.product.name}
                 {', '}
                 {item.catalogueEntry.package.name}
+                {` (${item.catalogueEntry.unitUsage} ${item.catalogueEntry.package.unit.name})`}
               </Link>
 
-              <div className="">
+              <div>
                 <Button
                   variant={'outline'}
-                  className="px-2 py-0"
-                  onClick={() => mutate({ catalogueId: item.catalogueId })}
+                  className="px-2 py-0 border-0"
+                  onClick={() =>
+                    removeFromCart({ catalogueId: item.catalogueId })
+                  }
                 >
-                  <Trash size={12} />
+                  <Trash size={12} className="py-0" />
                 </Button>
               </div>
             </div>
@@ -70,9 +96,14 @@ const CartItem = ({ item }: { item?: CartEntry }) => {
                   min={1}
                   value={quantity}
                   onChange={(e) => {
-                    console.log(e.target.value, Number.isNaN(e.target.value));
                     const num = Number(e.target.value);
-                    setQuantity((o) => (!Number.isNaN(num) ? num : o));
+                    if (!Number.isNaN(num)) {
+                      setQuantity(num);
+                      updateQuantity({
+                        catalogueId: item.catalogueId,
+                        quantity: num,
+                      });
+                    }
                   }}
                 />
                 <X />
@@ -95,10 +126,10 @@ const CartPage = (props: Props) => {
   return (
     <div>
       <CardTitle className="mb-2">Корзина</CardTitle>
-      {!isLoading && cartItems ? (
-        <div className="grid grid-cols-[2.5fr_1fr] gap-x-4">
-          <div className="flex-1">
-            {cartItems.count !== 0 ? (
+      <div className="grid grid-cols-[2.5fr_1fr] gap-x-4">
+        <div className="flex-1">
+          {!isLoading && cartItems ? (
+            cartItems.count !== 0 ? (
               <div className="space-y-2">
                 {cartItems.items.map((item) => (
                   <CartItem key={item.catalogueId} item={item} />
@@ -106,20 +137,28 @@ const CartPage = (props: Props) => {
               </div>
             ) : (
               <div>Корзина пуста</div>
-            )}
-          </div>
-          <div className="flex-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>К оплате</CardTitle>
-                <Price value={cartItems.total} />
-              </CardHeader>
-            </Card>
-          </div>
+            )
+          ) : (
+            <div className="space-y-2">
+              {[1, 3].map((i) => (
+                <Skeleton key={i} className="w-full h-28" />
+              ))}
+            </div>
+          )}
         </div>
-      ) : (
-        [1, 2, 3].map((u) => <Skeleton key={u} className="w-full h-[64px]" />)
-      )}
+        <div className="flex-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>К оплате</CardTitle>
+              {!isLoading ? (
+                <Price value={cartItems.total} />
+              ) : (
+                <Skeleton className="w-48 h-8" />
+              )}
+            </CardHeader>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { AddToCartDto } from '@/lib/dto/add-to-cart';
 import { RemoveFromCartDto } from '@/lib/dto/remove-from-cart';
+import { UpdateCartEntryDto } from '@/lib/dto/update-cart-entry.dto';
 import { AccountService } from '@/services/account.service';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -35,6 +36,31 @@ export function useAddToCart({
       client.invalidateQueries({
         queryKey: ['cart'],
       });
+      onSuccess?.();
+    },
+  });
+
+  return { mutate, isPending };
+}
+
+export function useUpdateCartEntry({
+  onError,
+  onSuccess,
+}: {
+  onSuccess?: () => void;
+  onError?: () => void;
+}) {
+  const client = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationKey: ['update-cart-entry'],
+    mutationFn: (dto: UpdateCartEntryDto) =>
+      AccountService.updateCartEntry(dto),
+    onError,
+    onSuccess: () => {
+      client.invalidateQueries({
+        queryKey: ['cart'],
+      });
+      console.log(onSuccess);
       onSuccess?.();
     },
   });
