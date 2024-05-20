@@ -18,6 +18,8 @@ import { PAGES } from '@/consts/pages.consts';
 import { useUser } from '@/hooks/dashboard/useUsers';
 import { useUserOwnerships } from '@/hooks/useUserFactories';
 import OwnerRequired from '@/components/utils/OwnerRequired';
+import EditUserForm from '@/components/forms/edit/EditUser';
+import AuthRequired from '@/components/utils/RoleRequired';
 
 type Props = {
   handle: string;
@@ -32,6 +34,13 @@ const UserPageComponent = ({ handle }: Props) => {
     <div className="flex gap-x-2">
       <div className="flex-2 gap-x-4">
         <Card className="px-4 py-2 w-[400px] relative mb-4">
+          {!isLoading && (
+            <OwnerRequired ownerHandle={user!.handle}>
+              <div className="mt-2 flex justify-end w-full">
+                <EditUserForm user={user!} />
+              </div>
+            </OwnerRequired>
+          )}
           <CardHeader className="items-center gap-2">
             {isLoading ? (
               <Skeleton className="w-[128px] h-[128px] rounded-full" />
@@ -75,7 +84,10 @@ const UserPageComponent = ({ handle }: Props) => {
             <>
               {ownerships?.items.map((o) => (
                 // eslint-disable-next-line react/jsx-key
-                <Link href={`/factory/${o.handle}`} className="hover:underline">
+                <Link
+                  href={`${user?.role === 'FACTORY_OWNER' ? PAGES.FACTORY : PAGES.SHOPS}/${o.handle}`}
+                  className="hover:underline"
+                >
                   <Card className="h-full ">
                     <CardHeader className="flex flex-col items-center justify-between h-full space-y-2">
                       <Avatar className="w-16 h-16">
@@ -91,7 +103,13 @@ const UserPageComponent = ({ handle }: Props) => {
               ))}
               {!isLoading && (
                 <OwnerRequired ownerHandle={user!.handle}>
-                  <Link href={PAGES.ADD_FACTORY}>
+                  <Link
+                    href={
+                      user?.role === 'FACTORY_OWNER'
+                        ? PAGES.ADD_FACTORY
+                        : PAGES.ADD_SHOP
+                    }
+                  >
                     <Card className="border-dashed flex justify-center items-center w-full h-full hover:bg-slate-50 transition-all">
                       <Plus />
                     </Card>

@@ -26,6 +26,9 @@ import CreateCatalogueEntryForm from '@/components/forms/create/CreateCatalogueE
 import { cn } from '@/lib/utils';
 import { CatalogueEntry } from '@/lib/types/domain/catalogue-entry.dto';
 import { Price, PriceRange } from '@/components/ui/price-range';
+import OwnerRequired from '@/components/utils/OwnerRequired';
+import { Input } from '@/components/ui/input';
+import { useCartStore } from '@/store/cart';
 
 type Props = {
   id: string;
@@ -34,11 +37,32 @@ type Props = {
 const ProductOverviewPage = ({ id }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const {
+    items: cartItems,
+    add: addCartItem,
+    find: findCartItem,
+  } = useCartStore();
+
   const { product, isLoading } = useProduct(id);
   const { productOwner, isLoading: productOwnerLoading } = useProductOwner(id);
   const { user, isLoading: userLoading } = useProfile();
 
   const [selectedEntry, setSelectedEntry] = useState<CatalogueEntry>();
+  const [unit, setUnit] = useState<number>();
+
+  const handleAddCartItem = (catalogueId: string) => {
+    if (unit) {
+      addCartItem(
+        {
+          id: catalogueId,
+          name: `${product?.name}, ${selectedEntry?.package.name}`,
+          price: selectedEntry?.price ?? 0,
+          productId: id,
+        },
+        unit,
+      );
+    }
+  };
 
   const isOwner = productOwner?.handle === user?.handle;
 
@@ -120,9 +144,7 @@ const ProductOverviewPage = ({ id }: Props) => {
                       : setSelectedEntry(entry);
                   }}
                 >
-                  <span className="text-lg">
-                    {entry.quantity} {entry.package.name} {entry.unit.name}
-                  </span>
+                  <span className="text-lg">{entry.package.name}</span>
                 </Button>
               ))}
             </div>
@@ -139,12 +161,32 @@ const ProductOverviewPage = ({ id }: Props) => {
                 <Price value={selectedEntry.price} />
               )}
             </div>
+
+            <div className="flex items-center gap-x-2">
+              <p>Количество: </p>
+              <div className="">
+                <Input
+                  min={1}
+                  value={unit}
+                  onChange={(e) => {
+                    console.log(e.target.value, Number.isNaN(e.target.value));
+                    const num = Number(e.target.value);
+                    setUnit((o) => (!Number.isNaN(num) ? num : o));
+                  }}
+                />
+              </div>
+            </div>
           </CardContent>
           <CardFooter>
             <Button
               disabled={
-                !selectedEntry || isOwner || user?.role !== 'SHOP_OWNER'
+                !selectedEntry ||
+                isOwner ||
+                user?.role !== 'SHOP_OWNER' ||
+                unit == 0 ||
+                !!findCartItem(selectedEntry.id)
               }
+              onClick={() => handleAddCartItem(selectedEntry?.id!)}
             >
               {isOwner ? (
                 <span>Вы владелец</span>
@@ -152,43 +194,50 @@ const ProductOverviewPage = ({ id }: Props) => {
                 <span>Заказывать могут только владельцы магазинов</span>
               ) : !selectedEntry ? (
                 <span>Выберите вариацию</span>
+              ) : findCartItem(selectedEntry.id) ? (
+                <span>Уже добавлено</span>
               ) : (
                 <span>Добавить в корзину</span>
               )}
             </Button>
           </CardFooter>
         </Card>
-        {!productOwnerLoading && !userLoading && isOwner && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Управление</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col items-start">
-              <Button variant={'link'} className="space-x-2">
-                <Pencil /> <span>Редактировать</span>
-              </Button>
-              <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                <DialogTrigger asChild>
-                  <Button variant={'link'} className="space-x-2">
-                    <PackagePlus /> <span>Добавить вариацию</span>
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>Добавить вариацию</DialogHeader>
-                  <DialogDescription className="space-y-2">
-                    <span>
-                      Добавление новой вариaции для товара &quot;{product?.name}
-                      &quot;
-                    </span>
-                    <CreateCatalogueEntryForm
-                      productId={id}
-                      callback={() => setIsOpen(false)}
-                    />
-                  </DialogDescription>
-                </DialogContent>
-              </Dialog>
-            </CardContent>
-          </Card>
+        {!productOwnerLoading && !userLoading && productOwner && (
+          <OwnerRequired ownerHandle={productOwner.handle}>
+            <Card>
+              <CardHeader>
+                <CardTitle>Управление</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col items-start">
+                <Button variant={'link'} className="space-x-2">
+                  <Pencil /> <span>Редактировать</span>
+                </Button>
+                <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant={'link'} className="space-x-2">
+                      <PackagePlus /> <span>Добавить вариацию</span>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>Добавить вариацию</DialogHeader>
+                    <DialogDescription className="space-y-2">
+                      <span>
+                        Добавление новой вариaции для товара &quot;
+                        {product?.name}
+                        &quot;
+                      </span>
+                      {product && (
+                        <CreateCatalogueEntryForm
+                          product={product!}
+                          callback={() => setIsOpen(false)}
+                        />
+                      )}
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
+              </CardContent>
+            </Card>
+          </OwnerRequired>
         )}
       </div>
     </div>

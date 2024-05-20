@@ -21,6 +21,7 @@ import {
 import { DataTable } from '@/components/data-table';
 import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 function DashboardTableView({ table }: { table: string }) {
   const {
@@ -76,6 +77,14 @@ function DashboardTableView({ table }: { table: string }) {
       ) : (
         <span>Ошибка загрузки</span>
       )} */}
+      <div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Действия</CardTitle>
+          </CardHeader>
+          <CardContent>{createForm}</CardContent>
+        </Card>
+      </div>
       <DataTable fetcher={useData} columns={columns} />
       {beforeTableContent ? beforeTableContent : ''}
     </div>

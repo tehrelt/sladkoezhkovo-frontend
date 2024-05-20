@@ -59,7 +59,7 @@ export const CreateConfectionaryTypeForm = () => {
           создан
         </span>,
       );
-      queryClient.invalidateQueries({ queryKey: ['confectionaryTypes'] });
+      queryClient.invalidateQueries({ queryKey: ['confectionary-types'] });
     },
     onError: (e) => {
       toast.error(e.message);

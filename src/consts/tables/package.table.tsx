@@ -6,6 +6,7 @@ import { DataTableOptions } from '@/lib/types/options/table.options';
 import { Package } from '@/lib/types/domain/package.dto';
 import { usePackages } from '@/hooks/dashboard/usePackages';
 import CreatePackageForm from '@/components/forms/create/dashboard/CreatePackageForm';
+import { Unit } from '@/lib/types/domain/unit.dto';
 
 const COLUMNS: ColumnDef<Package>[] = [
   {
@@ -23,6 +24,21 @@ const COLUMNS: ColumnDef<Package>[] = [
   {
     accessorKey: 'name',
     header: 'Название',
+  },
+  {
+    accessorKey: 'unit',
+    header: 'Ед. измерения',
+    cell: (cell) => {
+      const u = cell.getValue() as Unit;
+      return (
+        <Link
+          href={`${PAGES.DASHBOARD}/${DASHBOARD.UNITS}/${u.id}`}
+          className="hover:underline"
+        >
+          {u.name}
+        </Link>
+      );
+    },
   },
   {
     accessorKey: 'createdAt',

@@ -10,6 +10,7 @@ import {
 import { useUser } from '@/hooks/dashboard/useUsers';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { PAGES } from '@/consts/pages.consts';
 
 type Props = {
   handle: string;
@@ -22,7 +23,10 @@ const Mention = ({ handle, className }: Props) => {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <Link href={`/${handle}`} className={cn(className, 'hover:underline')}>
+        <Link
+          href={`${PAGES.USERS}/${handle}`}
+          className={cn(className, 'hover:underline')}
+        >
           @{handle}
         </Link>
       </HoverCardTrigger>

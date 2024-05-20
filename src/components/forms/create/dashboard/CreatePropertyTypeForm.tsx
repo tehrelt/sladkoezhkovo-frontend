@@ -43,7 +43,7 @@ export const CreatePropertyTypeForm = () => {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationKey: ['propertyTypes', 'create'],
+    mutationKey: ['property-types', 'create'],
     mutationFn: async (data: targetForm) => PropertyTypeService.create(data),
     onSuccess: (dto) => {
       toast.success(
@@ -58,7 +58,7 @@ export const CreatePropertyTypeForm = () => {
           создан
         </span>,
       );
-      queryClient.invalidateQueries({ queryKey: ['propertyTypes'] });
+      queryClient.invalidateQueries({ queryKey: ['property-types'] });
     },
     onError: (e) => {
       toast.error(e.message);

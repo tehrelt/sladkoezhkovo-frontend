@@ -32,6 +32,18 @@ import {
   SelectValue,
 } from '../ui/select';
 import { Skeleton } from '../ui/skeleton';
+import { Trash } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '../ui/alert-dialog';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -40,11 +52,13 @@ interface DataTableProps<TData, TValue> {
     isLoading: boolean;
     queryKey: string[];
   };
+  deleter?: (id: string) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   fetcher,
+  deleter,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -176,7 +190,7 @@ export function DataTable<TData, TValue>({
             ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  key={row.getVisibleCells()[0].getValue('id')}
+                  key={row.getVisibleCells()[0].getValue() as string}
                   data-state={row.getIsSelected() && 'selected'}
                   className="h-20"
                 >
@@ -188,6 +202,34 @@ export function DataTable<TData, TValue>({
                       )}
                     </TableCell>
                   ))}
+                  <TableCell>
+                    {/* {deleter && ( */}
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <div className="flex justify-center items-center border hover:bg-gray-200 py-2 px-2 rounded">
+                          <Trash />
+                        </div>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Удаление записи</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            <p>
+                              {row.getVisibleCells()[1].getValue() as string}
+                            </p>
+                            <p>
+                              Удаление этой записи понесёт за собой удаление
+                              связанных записей. {'(Количество: )'}
+                            </p>
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Отмена</AlertDialogCancel>
+                          <AlertDialogAction>Удалить</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </TableCell>
                 </TableRow>
               ))
             ) : (

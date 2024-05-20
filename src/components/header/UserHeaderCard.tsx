@@ -5,7 +5,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useLogout } from '@/hooks/useLogout';
 import { Skeleton } from '@/components/ui/skeleton';
-import RoleRequired from '../utils/RoleRequired';
+import AuthRequired from '../utils/RoleRequired';
 import { LOCAL_ROLES } from '@/consts/roles.consts';
 import { PAGES } from '@/consts/pages.consts';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
@@ -77,26 +77,26 @@ export default function UserHeaderCard() {
             <DropdownMenuContent>
               <DropdownMenuLabel> Мой аккаунт </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <RoleRequired roles={['ADMIN', 'MODERATOR']}>
+              <AuthRequired roles={['ADMIN', 'MODERATOR']}>
                 <DropdownMenuItem>
                   <Link href={PAGES.DASHBOARD}>Панель управления</Link>
                 </DropdownMenuItem>
-              </RoleRequired>
-              <RoleRequired roles={['FACTORY_OWNER', 'SHOP_OWNER']}>
+              </AuthRequired>
+              <AuthRequired roles={['FACTORY_OWNER', 'SHOP_OWNER']}>
                 <DropdownMenuItem>
                   <Link href={`${PAGES.USERS}/${user.handle}`}>Профиль</Link>
                 </DropdownMenuItem>
-              </RoleRequired>
-              <RoleRequired roles={['SHOP_OWNER']}>
+              </AuthRequired>
+              <AuthRequired roles={['SHOP_OWNER']}>
                 <DropdownMenuItem>
                   <Link href={`${PAGES.ADD_SHOP}`}>Добавить магазин</Link>
                 </DropdownMenuItem>
-              </RoleRequired>
-              <RoleRequired roles={['FACTORY_OWNER']}>
+              </AuthRequired>
+              <AuthRequired roles={['FACTORY_OWNER']}>
                 <DropdownMenuItem>
                   <Link href={`${PAGES.ADD_FACTORY}`}>Добавить фабрику</Link>
                 </DropdownMenuItem>
-              </RoleRequired>
+              </AuthRequired>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => logout()}>
                 Выход

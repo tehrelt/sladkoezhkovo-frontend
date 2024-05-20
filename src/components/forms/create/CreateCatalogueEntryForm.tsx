@@ -31,9 +31,11 @@ import { usePackages } from '@/hooks/dashboard/usePackages';
 import { useUnits } from '@/hooks/dashboard/useUnits';
 import { Package } from '@/lib/types/domain/package.dto';
 import { Unit } from '@/lib/types/domain/unit.dto';
+import { Product } from '@/lib/types/domain/product.dto';
 
 type Props = {
-  productId: string;
+  // productId: string;
+  product: Product;
   callback?: () => any;
 };
 
@@ -42,15 +44,10 @@ const schema = z.object({
     (e) => parseFloat(z.string().parse(e)),
     z.number().min(1),
   ),
-  quantity: z.preprocess(
-    (e) => parseInt(z.string().parse(e)),
-    z.number().min(1),
-  ),
   packageId: z.string().uuid(),
-  unitId: z.string().uuid(),
 });
 
-const CreateCatalogueEntryForm = ({ productId, callback }: Props) => {
+const CreateCatalogueEntryForm = ({ product, callback }: Props) => {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   });
@@ -61,11 +58,11 @@ const CreateCatalogueEntryForm = ({ productId, callback }: Props) => {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationKey: ['products', productId, 'catalogue', 'create'],
+    mutationKey: ['products', product.id, 'catalogue', 'create'],
     mutationFn: (dto: CreateCatalogueEntryDto) => CatalogueService.create(dto),
     onSuccess: (dto) => {
       toast.success('Продукт создан');
-      queryClient.invalidateQueries({ queryKey: ['products', productId] });
+      queryClient.invalidateQueries({ queryKey: ['products', product.id] });
     },
     onError: (error) => {
       toast.error(error);
@@ -74,7 +71,7 @@ const CreateCatalogueEntryForm = ({ productId, callback }: Props) => {
 
   const onSubmit = async (dto: z.infer<typeof schema>) => {
     await mutate({
-      productId,
+      productId: product.id,
       ...dto,
     });
     callback && callback();
@@ -83,43 +80,12 @@ const CreateCatalogueEntryForm = ({ productId, callback }: Props) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {/* <FormItem>
+        <FormItem>
           <FormLabel>Товар</FormLabel>
           <div className="border py-2 px-2 rounded-sm text-sm text-muted-foreground flex items-center gap-x-2">
-            {productId}
+            {product.name}
           </div>
-        </FormItem> */}
-
-        <FormField
-          name="unitId"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Ед. измерения?</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Выберите ед. измерения" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {uLoading ? (
-                    <p>Загрузка</p>
-                  ) : (
-                    <>
-                      {units!.items.map((u: Unit) => (
-                        <SelectItem key={u.id} value={u.id}>
-                          {u.name}
-                        </SelectItem>
-                      ))}
-                    </>
-                  )}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        </FormItem>
 
         <FormField
           name="packageId"
@@ -138,11 +104,24 @@ const CreateCatalogueEntryForm = ({ productId, callback }: Props) => {
                     <p>Загрузка</p>
                   ) : (
                     <>
-                      {packages!.items.map((p: Package) => (
-                        <SelectItem key={p.id} value={p.id}>
-                          {p.name}
-                        </SelectItem>
-                      ))}
+                      {(function () {
+                        const pp = packages?.items.filter(
+                          (p) =>
+                            !product.catalogueEntries
+                              ?.map((ce) => ce.package.id)
+                              .includes(p.id),
+                        );
+
+                        if (pp?.length === 0) {
+                          return <>Нет доступных фасовок</>;
+                        }
+
+                        return pp?.map((p) => (
+                          <SelectItem value={p.id} key={p.id}>
+                            {p.name}
+                          </SelectItem>
+                        ));
+                      })()}
                     </>
                   )}
                 </SelectContent>
@@ -157,19 +136,9 @@ const CreateCatalogueEntryForm = ({ productId, callback }: Props) => {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Цена?</FormLabel>
-              <Input {...field} type="number" />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          name="quantity"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Количество?</FormLabel>
+              <FormLabel>
+                Цена {'(если товар весовой, указывать цену за 100г)'}
+              </FormLabel>
               <Input {...field} type="number" />
               <FormMessage />
             </FormItem>

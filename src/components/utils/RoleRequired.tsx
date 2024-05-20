@@ -8,8 +8,12 @@ interface Props extends PropsWithChildren {
   roles?: ROLE[];
 }
 
-export default function RoleRequired({ roles, children }: Props) {
-  const { isLoading, user } = useProfile();
+export default function AuthRequired({ roles, children }: Props) {
+  const { isLoading, user, loggedOut } = useProfile();
+
+  if (loggedOut) {
+    return <></>;
+  }
 
   if (!roles) {
     return <>{children}</>;

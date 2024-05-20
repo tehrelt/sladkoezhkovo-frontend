@@ -9,7 +9,7 @@ import { fio } from '@/lib/utils';
 import { PAGES } from '@/consts/pages.consts';
 import { Input } from '../ui/input';
 import { Popover, PopoverContent } from '../ui/popover';
-import { PopoverTrigger } from '@radix-ui/react-popover';
+import { PopoverAnchor, PopoverTrigger } from '@radix-ui/react-popover';
 import { ScrollArea } from '../ui/scroll-area';
 import { Separator } from '@radix-ui/react-separator';
 import { debounce } from 'lodash';
@@ -81,7 +81,7 @@ const ResultGroup = ({
 };
 
 const Search = ({ className }: Props) => {
-  const [isOpen, setIsOpen] = React.useState(true);
+  const [isOpen, setIsOpen] = React.useState(false);
   const [query, setQuery] = React.useState('');
 
   const { data, isError, isLoading, queryKey } = useSearch(query);
@@ -100,22 +100,22 @@ const Search = ({ className }: Props) => {
 
   return (
     <Popover modal={false} open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger>
+      <PopoverAnchor>
         <Input
           placeholder="Поиск по сайту"
           onChange={(e) => handleChange(e.target.value)}
           className="w-96"
         />
-      </PopoverTrigger>
+      </PopoverAnchor>
       <PopoverContent
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => e.preventDefault()}
-        className="w-96"
+        className="w-96 mt-1"
       >
         <ScrollArea className="h-72">
           <SearchContext.Provider value={() => setIsOpen(false)}>
             {data && (
-              <div className="">
+              <>
                 <ResultGroup
                   heading="Товары"
                   visible={data.products.length !== 0}
@@ -161,7 +161,7 @@ const Search = ({ className }: Props) => {
                     }))}
                   />
                 </ResultGroup>
-              </div>
+              </>
             )}
           </SearchContext.Provider>
         </ScrollArea>

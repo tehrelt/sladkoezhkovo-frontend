@@ -9,6 +9,7 @@ export const PAGES = {
   FACTORY: '/factory',
   PRODUCTS: '/products',
   USERS: '/users',
+  SHOPS: '/shops',
 };
 
 export const DASHBOARD = {

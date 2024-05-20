@@ -43,6 +43,7 @@ type Props = { factoryHandle: string };
 const zForm = z.object({
   name: z.string(),
   confectionaryTypeId: z.string().uuid(),
+  weight: z.preprocess((v) => Number(v), z.number().min(0)),
   file: z.instanceof(File).refine((file) => file.size < 7 << 20, {
     message: 'Размер фото не должен превышать 7MB.',
   }),
@@ -101,6 +102,25 @@ const CreateProductForm = ({ factoryHandle }: Props) => {
                     <FormControl>
                       <Input
                         placeholder="Введите название продукта"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                name="weight"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Вес продукта</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Введите вес"
+                        type="number"
+                        min={1}
                         {...field}
                       />
                     </FormControl>

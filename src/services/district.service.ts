@@ -2,6 +2,7 @@ import { api } from '@/api/axios.config';
 import { District } from '@/lib/types/domain/district.dto';
 import { FiltersDto } from '@/lib/filters/index.dto';
 import { ListDto } from '@/lib/types/list.dto';
+import { DistrictFiltersDto } from '@/lib/filters/district-filters.dto';
 
 export class DistrictService {
   static BASE_URL = '/districts';
@@ -13,7 +14,9 @@ export class DistrictService {
     return response.data;
   }
 
-  static async list(f?: FiltersDto): Promise<ListDto<District>> {
+  static async list(
+    f?: FiltersDto & DistrictFiltersDto,
+  ): Promise<ListDto<District>> {
     const response = await api.get<ListDto<District>>(this.BASE_URL, {
       params: f,
     });

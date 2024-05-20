@@ -3,5 +3,5 @@ export interface OwnershipsDto {
     handle: string;
     name: string;
     image?: string;
-  };
+  }[];
 }

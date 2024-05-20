@@ -27,6 +27,16 @@ import Link from 'next/link';
 import { DASHBOARD, PAGES } from '@/consts/pages.consts';
 import { createPackageForm } from '@/lib/forms/package.form';
 import { PackageService } from '@/services/package.service';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useUnits } from '@/hooks/dashboard/useUnits';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Unit } from '@/lib/types/domain/unit.dto';
 
 type targetForm = z.infer<typeof createPackageForm>;
 
@@ -37,6 +47,8 @@ export const CreatePackageForm = () => {
   });
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const { data: units, isLoading: unitsLoading } = useUnits();
 
   const queryClient = useQueryClient();
 
@@ -88,6 +100,45 @@ export const CreatePackageForm = () => {
                   <FormControl>
                     <Input placeholder="Введите вид расфасовки" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="unitId"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Единица измерения</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={unitsLoading}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={
+                            unitsLoading ? 'Загрузка...' : 'Выберите город'
+                          }
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {unitsLoading
+                        ? [1, 2, 3].map((i) => (
+                            <SelectItem key={i} value={i.toString()}>
+                              <Skeleton className="w-[256px] h-[16px]" />
+                            </SelectItem>
+                          ))
+                        : units?.items.map((i: Unit) => (
+                            <SelectItem key={i.id} value={i.id}>
+                              {i.name}
+                            </SelectItem>
+                          ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

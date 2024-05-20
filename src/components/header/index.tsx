@@ -13,6 +13,8 @@ import UserHeaderCard from './UserHeaderCard';
 import { cn } from '@/lib/utils';
 import { useProfile } from '@/hooks/useProfile';
 import Search from './Search';
+import AuthRequired from '../utils/RoleRequired';
+import Cart from './Cart';
 
 type Props = {
   className?: string;
@@ -63,7 +65,12 @@ function Header({ className }: Props) {
         </NavigationMenu>
       </div>
       <div className="flex items-center gap-x-4 flex-none">
-        <Search className="" />
+        <AuthRequired>
+          <Search className="" />
+        </AuthRequired>
+        <AuthRequired roles={['SHOP_OWNER']}>
+          <Cart />
+        </AuthRequired>
         <UserHeaderCard />
       </div>
     </header>

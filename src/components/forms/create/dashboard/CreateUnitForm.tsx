@@ -85,7 +85,7 @@ export const CreateUnitForm = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Название города</FormLabel>
+                  <FormLabel>Единица измерения</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Введите единицу измерения (кг, г, л и т.д.)"

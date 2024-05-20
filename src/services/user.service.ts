@@ -27,8 +27,17 @@ export class UserService {
     return res.data;
   }
 
-  static async update(user: Partial<User>) {
-    const res = await api.patch<User>(`${this.BASE_URL}/${user.id}`, user);
-    return res.data;
+  static async update(dto: Partial<User> & { file?: File }) {
+    const data = new FormData();
+    dto.lastName && data.append('lastName', dto.lastName);
+    dto.firstName && data.append('firstName', dto.firstName);
+    dto.middleName && data.append('middleName', dto.middleName);
+    dto.file && data.append('file', dto.file);
+
+    const response = await api.patch<User>(`${this.BASE_URL}/${dto.id}`, data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+
+    return response.data;
   }
 }

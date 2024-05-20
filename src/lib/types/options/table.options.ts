@@ -14,4 +14,9 @@ export interface DataTableOptions<T = any, U = any> {
     queryKey: string[];
   };
   createForm?: ReactNode;
+
+  deleter?: {
+    prepare: (id: string) => number;
+    mutate: (id: string) => void;
+  };
 }

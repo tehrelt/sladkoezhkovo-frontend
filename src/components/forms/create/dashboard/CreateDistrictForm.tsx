@@ -103,7 +103,7 @@ export const CreateDistrictForm = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Название города</FormLabel>
+                  <FormLabel>Название района</FormLabel>
                   <FormControl>
                     <Input placeholder="Введите название города" {...field} />
                   </FormControl>

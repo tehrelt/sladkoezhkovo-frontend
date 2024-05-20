@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -38,6 +39,12 @@ export const EditUserForm = ({ user }: Props) => {
     lastName: z.string().min(1),
     firstName: z.string().min(1),
     middleName: z.string().min(1),
+    file: z
+      .instanceof(File)
+      .optional()
+      .refine((file) => !file || (!!file && file.size < 7 << 20), {
+        message: 'Размер фото не должен превышать 7MB.',
+      }),
   });
 
   const form = useForm<z.infer<typeof editForm>>({
@@ -62,10 +69,12 @@ export const EditUserForm = ({ user }: Props) => {
         lastName: data.lastName,
         firstName: data.firstName,
         middleName: data.middleName,
+        file: data.file,
       }),
     onSuccess: () => {
       toast.success(`Пользователь ${user.handle} успешно обновлен`);
-      queryClient.invalidateQueries({ queryKey: ['users', user.id] });
+      queryClient.invalidateQueries({ queryKey: ['users', user.handle] });
+      queryClient.invalidateQueries({ queryKey: ['user'] });
     },
     onError: (e) => {
       toast.error(e.message);
@@ -125,6 +134,28 @@ export const EditUserForm = ({ user }: Props) => {
                   <FormControl>
                     <Input placeholder="Введите отчетсво" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="file"
+              render={({ field: { value, onChange, ...fieldProps } }) => (
+                <FormItem>
+                  <FormLabel>Фото</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...fieldProps}
+                      type="file"
+                      accept="image/png, image/gif, image/jpeg"
+                      onChange={(event) =>
+                        onChange(event.target.files && event.target.files[0])
+                      }
+                    />
+                  </FormControl>
+                  <FormDescription />
                   <FormMessage />
                 </FormItem>
               )}

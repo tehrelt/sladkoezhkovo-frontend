@@ -8,5 +8,6 @@ export interface Product extends DomainEntity {
   confectionaryType: ConfectionaryType;
   factory: Factory;
   image: string;
+  weight: number;
   catalogueEntries?: CatalogueEntry[];
 }
