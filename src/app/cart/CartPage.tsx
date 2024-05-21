@@ -1,12 +1,19 @@
 'use client';
-import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Price } from '@/components/ui/price-range';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PAGES } from '@/consts/pages.consts';
 import Link from 'next/link';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import {
+  useBuyAction,
   useCart,
   useRemoveFromCart,
   useUpdateCartEntry,
@@ -17,6 +24,17 @@ import { Trash, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { debounce } from 'lodash';
 import { UpdateCartEntryDto } from '@/lib/dto/update-cart-entry.dto';
+import {
+  Select,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+} from '@/components/ui/select';
+import { useUserOwnerships } from '@/hooks/useUserFactories';
+import { useProfile } from '@/hooks/useProfile';
+import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 
 type Props = {};
@@ -123,6 +141,25 @@ const CartItem = ({ item }: { item?: CartEntry }) => {
 const CartPage = (props: Props) => {
   const { data: cartItems, isLoading } = useCart();
 
+  const { user } = useProfile();
+  const { data: shops, isLoading: shopsLoading } = useUserOwnerships(
+    user?.handle ?? '',
+  );
+
+  const { mutate: buy, isPending: txPending } = useBuyAction({
+    onSuccess: () => {
+      toast.success('Спасибо! Покупка прошла успешно!');
+    },
+  });
+
+  const [shop, setShop] = useState<string | undefined>(undefined);
+
+  const handleBuy = () => {
+    if (shop) {
+      buy({ shop: shop });
+    }
+  };
+
   return (
     <div>
       <CardTitle className="mb-2">Корзина</CardTitle>
@@ -150,12 +187,54 @@ const CartPage = (props: Props) => {
           <Card>
             <CardHeader>
               <CardTitle>К оплате</CardTitle>
-              {!isLoading ? (
+            </CardHeader>
+            <CardContent>
+              {!isLoading && cartItems ? (
                 <Price value={cartItems.total} />
               ) : (
                 <Skeleton className="w-48 h-8" />
               )}
-            </CardHeader>
+            </CardContent>
+            <CardFooter className="flex-col">
+              <div className="flex flex-col w-full gap-y-4">
+                <div className="space-y-1 w-full">
+                  <Label>Выберите магазин</Label>
+                  <Select
+                    value={shop}
+                    disabled={
+                      shopsLoading || (shops && shops.items.length === 0)
+                    }
+                    onValueChange={(e) => setShop(e)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder={
+                          shops?.items.length !== 0
+                            ? 'Выберите магазин'
+                            : 'Магазинов нет в наличии'
+                        }
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {!shopsLoading && shops ? (
+                          shops.items.map((shop) => (
+                            <SelectItem key={shop.handle} value={shop.handle}>
+                              {shop.name}
+                            </SelectItem>
+                          ))
+                        ) : (
+                          <Skeleton className="w-48 h-8" />
+                        )}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button disabled={!shop || txPending} onClick={handleBuy}>
+                  {shop ? <p>Купить</p> : <p>Выберите магазин</p>}
+                </Button>
+              </div>
+            </CardFooter>
           </Card>
         </div>
       </div>

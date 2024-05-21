@@ -1,4 +1,5 @@
 import { AddToCartDto } from '@/lib/dto/add-to-cart';
+import { BuyCartDto } from '@/lib/dto/buy-cart.dto';
 import { RemoveFromCartDto } from '@/lib/dto/remove-from-cart';
 import { UpdateCartEntryDto } from '@/lib/dto/update-cart-entry.dto';
 import { AccountService } from '@/services/account.service';
@@ -79,6 +80,29 @@ export function useRemoveFromCart({
   const { mutate, isPending } = useMutation({
     mutationKey: ['remove-to-cart'],
     mutationFn: (dto: RemoveFromCartDto) => AccountService.removeFromCart(dto),
+    onError,
+    onSuccess: () => {
+      client.invalidateQueries({
+        queryKey: ['cart'],
+      });
+      onSuccess?.();
+    },
+  });
+
+  return { mutate, isPending };
+}
+
+export function useBuyAction({
+  onError,
+  onSuccess,
+}: {
+  onSuccess?: () => void;
+  onError?: () => void;
+}) {
+  const client = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationKey: ['buy-cart'],
+    mutationFn: (dto: BuyCartDto) => AccountService.buy(dto),
     onError,
     onSuccess: () => {
       client.invalidateQueries({

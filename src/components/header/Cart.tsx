@@ -1,13 +1,13 @@
 'use client';
-import { ShoppingCart, Trash } from 'lucide-react';
-import React from 'react';
+import { ShoppingCart, Trash, X } from 'lucide-react';
+import React, { useState } from 'react';
 import { Popover } from '../ui/popover';
 import { PopoverContent, PopoverTrigger } from '@radix-ui/react-popover';
 import { Button } from '../ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PAGES } from '@/consts/pages.consts';
-import { useCart } from '@/hooks/useCart';
+import { useCart, useRemoveFromCart } from '@/hooks/useCart';
 import { Skeleton } from '../ui/skeleton';
 import { Price } from '../ui/price-range';
 
@@ -15,10 +15,12 @@ type Props = {};
 
 const Cart = (props: Props) => {
   const { data: cart, isLoading } = useCart();
+  const { mutate: removeFromCart } = useRemoveFromCart({});
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div>
-      <Popover modal={false}>
+      <Popover modal={false} open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger>
           <Button className="flex gap-x-2">
             <>
@@ -50,19 +52,23 @@ const Cart = (props: Props) => {
                       <Link
                         href={`${PAGES.PRODUCTS}/${item.catalogueEntry.product.id}`}
                         className="hover:underline text-sm"
+                        onClick={() => setIsOpen(false)}
                       >
                         {item.catalogueEntry.product.name}{' '}
                         {item.catalogueEntry.package.name}
                       </Link>
                       <div className="flex gap-x-2 items-center">
-                        {item.quantity} x
+                        <span>{item.quantity}</span>
+                        <X />
                         <Price value={item.catalogueEntry.price} />
                       </div>
                     </div>
                   </div>
                   <Button
                     className="px-2 py-1"
-                    // onClick={() => removeItem(item.entry.id)}
+                    onClick={() =>
+                      removeFromCart({ catalogueId: item.catalogueId })
+                    }
                   >
                     <Trash />
                   </Button>
@@ -74,7 +80,9 @@ const Cart = (props: Props) => {
           )}
 
           <Link href={PAGES.CART}>
-            <Button className="w-full">Перейти в корзину</Button>
+            <Button onClick={() => setIsOpen(false)} className="w-full">
+              Перейти в корзину
+            </Button>
           </Link>
         </PopoverContent>
       </Popover>

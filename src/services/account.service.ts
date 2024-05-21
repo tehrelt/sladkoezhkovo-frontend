@@ -2,6 +2,7 @@ import { api } from '@/api/axios.config';
 import { UpdateAvatarResponse } from '@/lib/dto/account.dto';
 import { AddToCartDto } from '@/lib/dto/add-to-cart';
 import { ProfileDto } from '@/lib/dto/auth.dto';
+import { BuyCartDto } from '@/lib/dto/buy-cart.dto';
 import { CartEntry } from '@/lib/dto/cart-entry.dto';
 import { CreateFactoryDto } from '@/lib/dto/create-factory.dto';
 import { CreateShopDto } from '@/lib/dto/create/shop.dto';
@@ -98,5 +99,10 @@ export class AccountService {
   }: RemoveFromCartDto): Promise<void> {
     const response = await api.delete(`/account/cart/${catalogueId}`);
     return;
+  }
+
+  static async buy(dto: BuyCartDto) {
+    const response = await api.post('/account/cart/buy', dto);
+    return response.data;
   }
 }

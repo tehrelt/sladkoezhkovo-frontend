@@ -15,6 +15,7 @@ import { useProfile } from '@/hooks/useProfile';
 import Search from './Search';
 import AuthRequired from '../utils/RoleRequired';
 import Cart from './Cart';
+import NotificationCenter from './NotificationCenter';
 
 type Props = {
   className?: string;
@@ -71,6 +72,10 @@ function Header({ className }: Props) {
         <AuthRequired roles={['SHOP_OWNER']}>
           <Cart />
         </AuthRequired>
+        <AuthRequired roles={['FACTORY_OWNER']}>
+          <NotificationCenter />
+        </AuthRequired>
+
         <UserHeaderCard />
       </div>
     </header>
