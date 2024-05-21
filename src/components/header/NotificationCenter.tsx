@@ -43,7 +43,7 @@ const NotificationCenter = (props: Props) => {
         <PopoverTrigger>
           <Button
             variant={
-              (isLoading ? 'outline' : notifications.length == 0) || isOpen
+              (isLoading ? 'outline' : unread == 0) || isOpen
                 ? 'ghost'
                 : 'default'
             }
@@ -52,7 +52,7 @@ const NotificationCenter = (props: Props) => {
           >
             <Bell />
             {!isLoading && notifications ? (
-              <span>{unread > 9 ? '9+' : unread}</span>
+              unread !== 0 && <span>{unread > 9 ? '9+' : unread}</span>
             ) : (
               <Skeleton className="w-1 h-1" />
             )}
