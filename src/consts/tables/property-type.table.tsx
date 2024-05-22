@@ -4,7 +4,10 @@ import { ColumnDef } from '@tanstack/react-table';
 import { datef } from '@/lib/utils';
 import { DataTableOptions } from '@/lib/types/options/table.options';
 import { City } from '@/lib/types/domain/city.dto';
-import { usePropertyTypes } from '@/hooks/dashboard/usePropertyTypes';
+import {
+  useDeletePropertyType,
+  usePropertyTypes,
+} from '@/hooks/dashboard/usePropertyTypes';
 import { PropertyType } from '@/lib/types/domain/property-type.dto';
 import CreatePropertyTypeForm from '@/components/forms/create/dashboard/CreatePropertyTypeForm';
 
@@ -43,4 +46,5 @@ export const PROPERTY_TYPE_TABLE: DataTableOptions<PropertyType> = {
   // @ts-ignore
   useData: usePropertyTypes,
   createForm: <CreatePropertyTypeForm />,
+  deleter: useDeletePropertyType,
 };

@@ -10,18 +10,19 @@ import {
 import React, { useState } from 'react';
 import { PAGES } from '@/consts/pages.consts';
 import { DATA_TABLES } from '@/consts/tables';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { DataTable } from '@/components/data-table';
-import { Skeleton } from '@/components/ui/skeleton';
+import { TableAction, DataTable } from '@/components/data-table';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Trash } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogFooter,
+  DialogHeader,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { DialogContent } from '@radix-ui/react-dialog';
+import { DeleteModal } from './DeleteModal';
 
 function DashboardTableView({ table }: { table: string }) {
   const {
@@ -31,6 +32,7 @@ function DashboardTableView({ table }: { table: string }) {
     afterTableContent,
     beforeTableContent,
     createForm,
+    deleter,
   } = DATA_TABLES[table];
 
   return (
@@ -85,7 +87,24 @@ function DashboardTableView({ table }: { table: string }) {
           <CardContent>{createForm}</CardContent>
         </Card>
       </div>
-      <DataTable fetcher={useData} columns={columns} />
+      <DataTable
+        fetcher={useData}
+        columns={columns}
+        actions={(function () {
+          const actions: TableAction<any>[] = [];
+          if (deleter) {
+            actions.push({
+              id: 'delete',
+              label: 'Удалить',
+              render: (r) => {
+                const id = r.getValue('id') as string;
+                return <DeleteModal id={id} deleter={deleter} />;
+              },
+            });
+          }
+          return actions;
+        })()}
+      />
       {beforeTableContent ? beforeTableContent : ''}
     </div>
   );

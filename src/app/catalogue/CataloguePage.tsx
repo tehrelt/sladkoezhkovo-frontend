@@ -84,7 +84,7 @@ const CatalogueItem = ({
                 <CardTitle className="text-lg">{item.product.name}</CardTitle>
                 <Price value={item.price} />
               </div>
-              <CardDescription className="flex justify-between">
+              <CardDescription className="flex justify-between text-sm">
                 <p>
                   {item.product.confectionaryType} / {item.unitUsage} /{' '}
                   {item.package.name}

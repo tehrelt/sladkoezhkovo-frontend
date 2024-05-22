@@ -3,7 +3,7 @@ import { DASHBOARD, PAGES } from '../pages.consts';
 import { ColumnDef } from '@tanstack/react-table';
 import { datef } from '@/lib/utils';
 import { DataTableOptions } from '@/lib/types/options/table.options';
-import { useCities } from '@/hooks/dashboard/useCities';
+import { useCities, useDeleteCity } from '@/hooks/dashboard/useCities';
 import { City } from '@/lib/types/domain/city.dto';
 import CreateCityForm from '@/components/forms/create/dashboard/CreateCityForm';
 
@@ -38,8 +38,9 @@ const COLUMNS: ColumnDef<City>[] = [
 
 export const CITY_TABLE: DataTableOptions<City> = {
   title: 'Города',
-  columns: COLUMNS,
   // @ts-ignore
   useData: useCities,
+  deleter: useDeleteCity,
   createForm: <CreateCityForm />,
+  columns: COLUMNS,
 };

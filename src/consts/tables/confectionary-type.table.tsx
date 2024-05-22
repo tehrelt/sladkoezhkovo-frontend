@@ -5,7 +5,10 @@ import { datef } from '@/lib/utils';
 import { DataTableOptions } from '@/lib/types/options/table.options';
 import { City } from '@/lib/types/domain/city.dto';
 import { ConfectionaryType } from '@/lib/types/domain/confectionary-type.dto';
-import { useConfectionaryTypes } from '@/hooks/dashboard/useConfectionaryTypes';
+import {
+  useConfectionaryTypes,
+  useDeleteConfectionaryType,
+} from '@/hooks/dashboard/useConfectionaryTypes';
 import CreateConfectionaryTypeForm from '@/components/forms/create/dashboard/CreateConfectionaryTypeForm';
 
 const COLUMNS: ColumnDef<ConfectionaryType>[] = [
@@ -43,4 +46,5 @@ export const CONFECTIONARY_TYPE_TABLE: DataTableOptions<ConfectionaryType> = {
   // @ts-ignore
   useData: useConfectionaryTypes,
   createForm: <CreateConfectionaryTypeForm />,
+  deleter: useDeleteConfectionaryType,
 };

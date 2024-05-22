@@ -20,6 +20,7 @@ import { useUserOwnerships } from '@/hooks/useUserFactories';
 import OwnerRequired from '@/components/utils/OwnerRequired';
 import EditUserForm from '@/components/forms/edit/EditUser';
 import AuthRequired from '@/components/utils/RoleRequired';
+import ShopShipmentsList from './ShopShipmentsList';
 
 type Props = {
   handle: string;
@@ -75,50 +76,62 @@ const UserPageComponent = ({ handle }: Props) => {
           </CardHeader>
         </Card>
       </div>
-      <div className="flex-1">
-        <p className="text-2xl font-bold">Владения</p>
-        <div className="grid grid-cols-3 gap-x-4 gap-y-4">
-          {ownershipLoading ? (
-            <>Loading...</>
-          ) : (
-            <>
-              {ownerships?.items.map((o) => (
-                // eslint-disable-next-line react/jsx-key
-                <Link
-                  href={`${user?.role === 'FACTORY_OWNER' ? PAGES.FACTORY : PAGES.SHOPS}/${o.handle}`}
-                  className="hover:underline"
-                >
-                  <Card className="h-full ">
-                    <CardHeader className="flex flex-col items-center justify-between h-full space-y-2">
-                      <Avatar className="w-16 h-16">
-                        <AvatarImage src={o.image} />
-                        <AvatarFallback />
-                      </Avatar>
-                      <div className="w-full">
-                        <CardTitle className="text-lg">{o.name}</CardTitle>
-                      </div>
-                    </CardHeader>
-                  </Card>
-                </Link>
-              ))}
-              {!isLoading && (
-                <OwnerRequired ownerHandle={user!.handle}>
+      <div className="flex-1 space-y-4">
+        <div>
+          <p className="text-2xl font-bold">Владения</p>
+          <div className="grid grid-cols-3 gap-x-4 gap-y-4">
+            {ownershipLoading ? (
+              <>Loading...</>
+            ) : (
+              <>
+                {ownerships?.items.map((o) => (
+                  // eslint-disable-next-line react/jsx-key
                   <Link
-                    href={
-                      user?.role === 'FACTORY_OWNER'
-                        ? PAGES.ADD_FACTORY
-                        : PAGES.ADD_SHOP
-                    }
+                    href={`${user?.role === 'FACTORY_OWNER' ? PAGES.FACTORY : PAGES.SHOPS}/${o.handle}`}
+                    className="hover:underline"
                   >
-                    <Card className="border-dashed flex justify-center items-center w-full h-full hover:bg-slate-50 transition-all">
-                      <Plus />
+                    <Card className="h-full ">
+                      <CardHeader className="flex flex-col items-center justify-between h-full space-y-2">
+                        <Avatar className="w-16 h-16">
+                          <AvatarImage src={o.image} />
+                          <AvatarFallback />
+                        </Avatar>
+                        <div className="w-full">
+                          <CardTitle className="text-lg">{o.name}</CardTitle>
+                        </div>
+                      </CardHeader>
                     </Card>
                   </Link>
-                </OwnerRequired>
-              )}
-            </>
-          )}
+                ))}
+                {!isLoading && (
+                  <OwnerRequired ownerHandle={user!.handle}>
+                    <Link
+                      href={
+                        user?.role === 'FACTORY_OWNER'
+                          ? PAGES.ADD_FACTORY
+                          : PAGES.ADD_SHOP
+                      }
+                    >
+                      <Card className="border-dashed flex justify-center items-center w-full h-full hover:bg-slate-50 transition-all">
+                        <Plus />
+                      </Card>
+                    </Link>
+                  </OwnerRequired>
+                )}
+              </>
+            )}
+          </div>
         </div>
+        {user && (
+          <OwnerRequired ownerHandle={user!.handle}>
+            <div>
+              <p className="text-2xl font-bold">Заказы</p>
+              <AuthRequired roles={['SHOP_OWNER']}>
+                <ShopShipmentsList />
+              </AuthRequired>
+            </div>
+          </OwnerRequired>
+        )}
       </div>
     </div>
   );

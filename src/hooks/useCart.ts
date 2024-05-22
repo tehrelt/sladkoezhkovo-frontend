@@ -10,6 +10,7 @@ export function useCart() {
     queryKey: ['cart'],
     queryFn: AccountService.cart,
     retry: false,
+    // refetchInterval: 10000,
   });
 
   const checkProduct = (catalogueId: string) => {

@@ -7,7 +7,9 @@ import { CartEntry } from '@/lib/dto/cart-entry.dto';
 import { CreateFactoryDto } from '@/lib/dto/create-factory.dto';
 import { CreateShopDto } from '@/lib/dto/create/shop.dto';
 import { RemoveFromCartDto } from '@/lib/dto/remove-from-cart';
+import { ShopShipment } from '@/lib/dto/shipments.dto';
 import { UpdateCartEntryDto } from '@/lib/dto/update-cart-entry.dto';
+import { FiltersDto } from '@/lib/filters/index.dto';
 import { Factory } from '@/lib/types/domain/factory.dto';
 import { Shop } from '@/lib/types/domain/shop.dto';
 import { ListDto } from '@/lib/types/list.dto';
@@ -103,6 +105,19 @@ export class AccountService {
 
   static async buy(dto: BuyCartDto) {
     const response = await api.post('/account/cart/buy', dto);
+    return response.data;
+  }
+
+  static async shopShipments(f?: FiltersDto): Promise<ListDto<ShopShipment>> {
+    const response = await api.get<ListDto<ShopShipment>>(
+      '/account/shipments/shop',
+      { params: f },
+    );
+    return response.data;
+  }
+
+  static async factoryShipments() {
+    const response = await api.get('/account/shipments/factory');
     return response.data;
   }
 }

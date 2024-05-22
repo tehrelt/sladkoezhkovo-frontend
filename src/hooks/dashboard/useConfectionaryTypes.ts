@@ -1,6 +1,7 @@
 import { FiltersDto } from '@/lib/filters/index.dto';
+import { IDeleter } from '@/lib/types/options/table.options';
 import { ConfectionaryTypeService } from '@/services/confectionary-type.service';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export function useConfectionaryTypes(f?: FiltersDto) {
   const key = ['confectionary-types'];
@@ -24,4 +25,32 @@ export const useConfectionaryType = (id: string) => {
   });
 
   return { data, isLoading };
+};
+
+export const useDeleteConfectionaryType = (
+  id: string,
+  f?: { onSuccess: () => void },
+): IDeleter => {
+  const client = useQueryClient();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['confectionary-types', 'deps', id],
+    queryFn: () => ConfectionaryTypeService.deps(id),
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ['confectionary-types', 'delete'],
+    mutationFn: async () => await ConfectionaryTypeService.delete(id),
+    onSuccess: () => {
+      f?.onSuccess();
+      client.invalidateQueries({ queryKey: ['confectionary-types'] });
+    },
+  });
+
+  return {
+    mutate,
+    deps: data,
+    deletePending: isPending,
+    depsLoading: isLoading,
+  };
 };

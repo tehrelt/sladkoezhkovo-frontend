@@ -3,6 +3,7 @@ import {
   ColumnDef,
   ColumnFiltersState,
   PaginationState,
+  Row,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -53,12 +54,20 @@ interface DataTableProps<TData, TValue> {
     queryKey: string[];
   };
   deleter?: (id: string) => void;
+  actions?: TableAction<TData>[];
+}
+
+export interface TableAction<TData> {
+  id: string;
+  label: string;
+  render: (row: Row<TData>) => JSX.Element;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   fetcher,
   deleter,
+  actions,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -173,6 +182,7 @@ export function DataTable<TData, TValue>({
                     </TableHead>
                   );
                 })}
+                {actions && <TableHead>Действия</TableHead>}
               </TableRow>
             ))}
           </TableHeader>
@@ -202,34 +212,11 @@ export function DataTable<TData, TValue>({
                       )}
                     </TableCell>
                   ))}
-                  <TableCell>
-                    {/* {deleter && ( */}
-                    <AlertDialog>
-                      <AlertDialogTrigger>
-                        <div className="flex justify-center items-center border hover:bg-gray-200 py-2 px-2 rounded">
-                          <Trash />
-                        </div>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Удаление записи</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            <p>
-                              {row.getVisibleCells()[1].getValue() as string}
-                            </p>
-                            <p>
-                              Удаление этой записи понесёт за собой удаление
-                              связанных записей. {'(Количество: )'}
-                            </p>
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Отмена</AlertDialogCancel>
-                          <AlertDialogAction>Удалить</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </TableCell>
+                  {actions && (
+                    <TableCell className="flex justify-end">
+                      {actions.map((action) => action.render(row))}
+                    </TableCell>
+                  )}
                 </TableRow>
               ))
             ) : (

@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { ListDto } from '../list.dto';
 import { FiltersDto } from '../../filters/index.dto';
+import { DepsDto } from '../deps.dto';
 
 export interface DataTableOptions<T = any, U = any> {
   title: string;
@@ -14,9 +15,12 @@ export interface DataTableOptions<T = any, U = any> {
     queryKey: string[];
   };
   createForm?: ReactNode;
+  deleter?: (id: string) => IDeleter;
+}
 
-  deleter?: {
-    prepare: (id: string) => number;
-    mutate: (id: string) => void;
-  };
+export interface IDeleter {
+  deps?: DepsDto;
+  depsLoading: boolean;
+  mutate: () => void;
+  deletePending: boolean;
 }
