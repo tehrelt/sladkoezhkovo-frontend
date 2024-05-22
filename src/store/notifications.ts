@@ -28,7 +28,7 @@ export const useNotificationStore = create<NotificationStore>()(
           }
 
           return {
-            notifications: [...state.notifications, notification],
+            notifications: [notification, ...state.notifications],
           };
         });
       },

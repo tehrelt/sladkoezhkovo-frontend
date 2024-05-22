@@ -7,6 +7,15 @@ export interface CatalogueEntry extends DomainEntity {
   price: number;
   quantity: number;
   unitUsage: number;
-  unit: Unit;
   package: Package;
+  product: {
+    id: string;
+    name: string;
+    confectionaryType: string;
+    image?: string;
+  };
+  factory: {
+    name: string;
+    handle: string;
+  };
 }

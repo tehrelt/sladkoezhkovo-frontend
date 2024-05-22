@@ -7,6 +7,8 @@ export async function middleware(request: NextRequest) {
 
   const token = cookies.get('accessToken');
 
+  console.log('access token', token);
+
   const isDashboardPage = url.includes(PAGES.DASHBOARD);
   const isAuthPage = url.includes(PAGES.AUTH);
 
@@ -47,5 +49,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/auth/:path*'],
+  matcher: ['/dashboard/:path*', '/auth/:path*', '/'],
 };

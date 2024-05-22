@@ -62,6 +62,15 @@ function Header({ className }: Props) {
                 </NavigationMenuItem>
               </>
             )}
+            <AuthRequired roles={['SHOP_OWNER']}>
+              <NavigationMenuItem>
+                <Link href="/catalogue" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Каталог
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            </AuthRequired>
           </NavigationMenuList>
         </NavigationMenu>
       </div>

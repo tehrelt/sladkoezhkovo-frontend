@@ -8,10 +8,15 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useProduct, useProductOwner } from '@/hooks/useProduct';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useRouter } from 'next/navigation';
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { useProfile } from '@/hooks/useProfile';
 import { PackagePlus, Pencil } from 'lucide-react';
@@ -46,6 +51,8 @@ const ProductOverviewPage = ({ id }: Props) => {
   const [selectedEntry, setSelectedEntry] = useState<CatalogueEntry>();
   const [unit, setUnit] = useState<number>();
 
+  const router = useRouter();
+
   const { checkProduct } = useCart();
   const { mutate, isPending } = useAddToCart({});
 
@@ -76,8 +83,6 @@ const ProductOverviewPage = ({ id }: Props) => {
     const [min, max] = [Math.min(...prices), Math.max(...prices)];
     return { min, max };
   };
-
-  const router = useRouter();
 
   return (
     <div className="grid grid-cols-[2fr_1.5fr] gap-x-4">
